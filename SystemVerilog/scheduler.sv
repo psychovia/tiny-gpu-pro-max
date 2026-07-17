@@ -23,6 +23,8 @@ module scheduler(
     output state_t state,          // exposed so core.sv can hand the shared phase to fetcher/cpu/pc
     input  logic done [0:31],
     output logic kernel_done
+    input logic [31:0] pc, 
+    output logic stall
 );
 
     state_t next_state;
