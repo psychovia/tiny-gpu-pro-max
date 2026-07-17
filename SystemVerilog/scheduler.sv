@@ -22,29 +22,29 @@ module scheduler(
     output logic [4:0] thread_id,
     output state_t state,          // exposed so core.sv can hand the shared phase to fetcher/cpu/pc
     input  logic done [0:31],
-    output logic kernel_done
-    input logic [31:0] pc, 
+    output logic block_done,
+    input logic [31:0] pc,
     output logic stall
 );
 
     state_t next_state;
 
-    // kernel_done true if all lanes are done
-    logic kernel_done_comb;
+    // block_done true if all lanes in this block are done
+    logic block_done_comb;
     always_comb begin
-        kernel_done_comb = 1'b1;
+        block_done_comb = 1'b1;
         for (int i = 0; i < 32; i++) begin
-            kernel_done_comb = kernel_done_comb & done[i];
+            block_done_comb = block_done_comb & done[i];
         end
     end
-    assign kernel_done = kernel_done_comb;
+    assign block_done = block_done_comb;
 
     // state register
-    // freezes once kernel_done; stop advancing/fetching once the
-    // whole kernel has finished, instead of looping past the end forever.
+    // freezes once block_done; stop advancing/fetching once the
+    // whole block has finished, instead of looping past the end forever.
     always_ff @(posedge clk) begin
         if (rst) state <= S_FETCH;
-        else if (~kernel_done) state <= next_state;
+        else if (~block_done) state <= next_state;
     end
 
     // next state logic
