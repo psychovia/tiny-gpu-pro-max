@@ -25,19 +25,20 @@ module shared_mem #(
     parameter int    MEM_SIZE_BYTES = gpu_pkg::MEM_SIZE_BYTES,
     parameter string INIT_FILE      = "mems/kernel.mem"
 ) (
-    input logic         clk, rst,
-    input logic [31:0]  addr,
+    input  logic         clk, rst,
+    input  logic [31:0]  addr      [0:N_THREADS-1],
 
     // cpu / thread
-    input logic         mem_read,
-    input logic         mem_write,
-    input logic  [31:0] mem_wdata,
-    output logic [31:0] mem_rdata,
-    output logic        mem_valid
+    input  logic         mem_read  [0:N_THREADS-1],
+    input  logic         mem_write [0:N_THREADS-1],
+    input  logic [31:0]  mem_wdata [0:N_THREADS-1],
+    input  logic [3:0]   byte_en   [0:N_THREADS-1],
+    output logic [31:0]  mem_rdata [0:N_THREADS-1],
+    output logic         mem_valid [0:N_THREADS-1],
 
     // display
-    input logic  disp_addr,
-    output logic disp_rdata,
+    input  logic [31:0]  disp_addr,
+    output logic [31:0]  disp_rdata
 );
 
     localparam int WORDS = MEM_SIZE_BYTES / 4;
@@ -67,7 +68,7 @@ module shared_mem #(
         granted_lane = '0;
         grant_valid  = 1'b0;
         for (int i = 0; i < N_THREADS; i++) begin
-            if (req[i] && !grant_valid) begin
+            if ((mem_read[i] | mem_write[i]) && !grant_valid) begin
                 granted_lane = i[$clog2(N_THREADS)-1:0];
                 grant_valid  = 1'b1;
             end
@@ -85,24 +86,24 @@ module shared_mem #(
 
     always_ff @(posedge clk) begin
         if (rst) begin
-            for (int i = 0; i < N_THREADS; i++) valid[i] <= 1'b0;
+            for (int i = 0; i < N_THREADS; i++) mem_valid[i] <= 1'b0;
         end else begin
-            for (int i = 0; i < N_THREADS; i++) valid[i] <= 1'b0;  // default low each cycle
+            for (int i = 0; i < N_THREADS; i++) mem_valid[i] <= 1'b0;  // default low each cycle
 
             if (grant_valid) begin
                 word_idx = addr[granted_lane][15:2];
 
-                if (we[granted_lane]) begin
+                if (mem_write[granted_lane]) begin
                     // byte-masked write — same pattern as the original cpu.sv (lines 206-211)
-                    if (byte_en[granted_lane][0]) mem[word_idx][7:0]   <= wdata[granted_lane][7:0];
-                    if (byte_en[granted_lane][1]) mem[word_idx][15:8]  <= wdata[granted_lane][15:8];
-                    if (byte_en[granted_lane][2]) mem[word_idx][23:16] <= wdata[granted_lane][23:16];
-                    if (byte_en[granted_lane][3]) mem[word_idx][31:24] <= wdata[granted_lane][31:24];
+                    if (byte_en[granted_lane][0]) mem[word_idx][7:0]   <= mem_wdata[granted_lane][7:0];
+                    if (byte_en[granted_lane][1]) mem[word_idx][15:8]  <= mem_wdata[granted_lane][15:8];
+                    if (byte_en[granted_lane][2]) mem[word_idx][23:16] <= mem_wdata[granted_lane][23:16];
+                    if (byte_en[granted_lane][3]) mem[word_idx][31:24] <= mem_wdata[granted_lane][31:24];
                 end
 
-                rdata[granted_lane_prev] <= mem[word_idx];
-                valid[granted_lane_prev] <= 1'b1;
-                granted_lane_prev         <= granted_lane;
+                mem_rdata[granted_lane_prev] <= mem[word_idx];
+                mem_valid[granted_lane_prev] <= 1'b1;
+                granted_lane_prev            <= granted_lane;
             end
         end
     end

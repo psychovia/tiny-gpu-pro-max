@@ -63,4 +63,4 @@ module display_controller #(
     assign g = blank_out ? 8'd0 : luma;
     assign b = blank_out ? 8'd0 : luma;
 
-endmodule : assembler
+endmodule : display_controller
