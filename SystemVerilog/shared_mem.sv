@@ -33,7 +33,7 @@ module shared_mem #(
     input logic         mem_write,
     input logic  [31:0] mem_wdata,
     output logic [31:0] mem_rdata,
-    output logic        mem_valid
+    output logic        mem_valid,
 
     // display
     input logic  disp_addr,
