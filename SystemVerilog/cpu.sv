@@ -4,6 +4,7 @@ import gpu_pkg::*;
 
 module cpu (
     input logic clk, rst,
+    input logic block_start,   // pulses when advancing to the next block; resets regs/done like rst does
     input state_t state,       // shared phase, driven by scheduler.sv
     input logic [4:0] thread_id,
     input logic [6:0] opcode,
@@ -136,9 +137,11 @@ module cpu (
         end
     end
 
-    // reset registers
+    // reset registers -- also on block_start, so the next block starts
+    // from a clean register file instead of inheriting the previous
+    // block's values
     always_ff @(posedge clk) begin
-        if (rst) begin
+        if (rst | block_start) begin
             for (int i = 0; i < 32; i++) regs[i] <= 32'd0;
         end
     end
@@ -154,9 +157,10 @@ module cpu (
     end
 
     // done -- sticky, set once this lane writes 1 to x31 via an ALU
-    // op, never cleared except on reset.
+    // op, never cleared except on reset or block_start (next block needs
+    // to run from a fresh, un-done state).
     always_ff @(posedge clk) begin
-        if (rst) begin
+        if (rst | block_start) begin
             done <= 1'b0;
         end
         else if (is_ALU_RESULT && rd == 5'd31 && alu_result == 32'd1) begin

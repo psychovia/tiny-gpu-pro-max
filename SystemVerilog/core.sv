@@ -19,7 +19,9 @@ module core (
     output logic        mem_write [0:31], // per lane -- asserted on the one cycle a store commits
     output logic [31:0] mem_wdata [0:31], // per lane -- store data, shifted into byte position
     output logic [3:0]  byte_en   [0:31], // per lane -- which byte lane(s) of mem_wdata are valid
-    output logic        block_done        // high once every lane in this block has signaled done
+    output logic        block_done,       // high once every lane in the current block has signaled done
+    output logic        kernel_done,      // high once every block has been dispatched and completed
+    output logic [gpu_pkg::BLOCK_ID_WIDTH-1:0] block_id  // which block is currently assigned to this core
 );
 
     // ------------------------------------------------------------------
@@ -42,6 +44,7 @@ module core (
                                                     // branches -- picking which lane and wiring it
                                                     // into pc.sv is step #3, not done yet.
     logic        done [0:31];                     // per-lane done, feeds scheduler's block_done reduction
+    logic        block_start;                     // pulses when advancing to the next block; resets pc/regs/done like rst does, without touching block_id
 
     // ------------------------------------------------------------------
     // 1. scheduler - owns the shared state machine, decides when to move

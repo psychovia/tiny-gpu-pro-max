@@ -5,7 +5,7 @@ library of macros / constants
 
 package gpu_pkg;
 
-    parameter int N_THREADS       = 4;
+    parameter int N_THREADS       = 32;
     parameter int IMG_WIDTH       = 64;
     parameter int IMG_HEIGHT      = 64;
     parameter int BYTES_PER_PIXEL = 4;
@@ -17,6 +17,13 @@ package gpu_pkg;
     parameter logic [31:0] MMIO_BASE = 32'hFFFF_0000;
 
     parameter int MEM_SIZE_BYTES = PROG_SIZE + IMG_SIZE_BYTES;
+
+    // one thread = one pixel; a single core (N_THREADS lanes) can't cover the
+    // whole image in one pass, so the kernel is split into sequential blocks
+    // of N_THREADS pixels each, dispatched one at a time by scheduler.sv
+    parameter int TOTAL_THREADS  = IMG_WIDTH * IMG_HEIGHT;
+    parameter int NUM_BLOCKS     = TOTAL_THREADS / N_THREADS;
+    parameter int BLOCK_ID_WIDTH = $clog2(NUM_BLOCKS);
 
     typedef enum logic [3:0] {
         S_FETCH,        // present mem address = pc

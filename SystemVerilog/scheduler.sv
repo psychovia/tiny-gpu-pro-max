@@ -23,13 +23,16 @@ module scheduler(
     output state_t state,          // exposed so core.sv can hand the shared phase to fetcher/cpu/pc
     input  logic done [0:31],
     output logic block_done,
+    output logic kernel_done,
+    output logic [gpu_pkg::BLOCK_ID_WIDTH-1:0] block_id,
+    output logic block_start,
     input logic [31:0] pc,
     output logic stall
 );
 
     state_t next_state;
 
-    // block_done true if all lanes in this block are done
+    // block_done true if all lanes in the *current* block are done
     logic block_done_comb;
     always_comb begin
         block_done_comb = 1'b1;
@@ -39,12 +42,37 @@ module scheduler(
     end
     assign block_done = block_done_comb;
 
+    // block_id: which of the NUM_BLOCKS sequential blocks is currently
+    // assigned to this core. Advances by one each time block_done fires,
+    // until every block has been dispatched.
+    logic [gpu_pkg::BLOCK_ID_WIDTH-1:0] block_id_reg;
+    assign block_id = block_id_reg;
+
+    // kernel_done: the last block (block_id == NUM_BLOCKS-1) has finished --
+    // the whole image is done, not just the current block.
+    assign kernel_done = block_done & (block_id_reg == gpu_pkg::NUM_BLOCKS - 1);
+
+    // block_start: pulses the cycle a non-final block finishes, telling
+    // cpu.sv/pc.sv to reset their per-block state (regs/done/pc) for the
+    // next block the same way rst does -- without touching block_id.
+    assign block_start = block_done & ~kernel_done;
+
     // state register
-    // freezes once block_done; stop advancing/fetching once the
-    // whole block has finished, instead of looping past the end forever.
+    // freezes once kernel_done (whole kernel finished). On block_done that
+    // isn't the last block, restart at S_FETCH for the next block instead of
+    // advancing next_state, and bump block_id.
     always_ff @(posedge clk) begin
-        if (rst) state <= S_FETCH;
-        else if (~block_done) state <= next_state;
+        if (rst) begin
+            state        <= S_FETCH;
+            block_id_reg <= '0;
+        end else if (kernel_done) begin
+            // frozen -- nothing left to dispatch
+        end else if (block_done) begin
+            state        <= S_FETCH;
+            block_id_reg <= block_id_reg + 1'b1;
+        end else begin
+            state <= next_state;
+        end
     end
 
     // next state logic
