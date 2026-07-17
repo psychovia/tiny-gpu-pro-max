@@ -9,6 +9,11 @@ scheduler
     detect different pcs among threads
         - if different - pick an arbitrary pc to work on, stall the rest, continue when done
 
+<<<<<<< HEAD
+=======
+    block
+
+>>>>>>> tabris
 **/
 
 // moving state/next_state logic here because we don't want 32 independent copies of "what phase am I in," each free to disagree with others which would break SIMD
