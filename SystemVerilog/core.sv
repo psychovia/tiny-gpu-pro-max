@@ -1,12 +1,111 @@
 /**
-Core
+core
 - main for thread execution
 
 - scheduler.sv
 - fetcher.sv
 - decoder.sv
-- lsu.sv
-- alu.sv
 - pc.sv
-- registers.sv
+- cpu.sv
 **/
+
+import gpu_pkg::*;
+
+module core (
+    input logic clk, rst,
+    input  logic [31:0] mem_rdata [0:31], // one read-data word per lane (indexed by lane, not shared) -MEMORY.SV
+    output logic [31:0] mem_addr  [0:31], // one address per lane; each cpu lane drives its own (pc during fetch, ea during load/store)
+    output logic        mem_read  [0:31], // per lane -- asserted whenever that lane wants read data this cycle
+    output logic        mem_write [0:31], // per lane -- asserted on the one cycle a store commits
+    output logic [31:0] mem_wdata [0:31], // per lane -- store data, shifted into byte position
+    output logic [3:0]  byte_en   [0:31], // per lane -- which byte lane(s) of mem_wdata are valid
+    output logic        kernel_done       // high once every lane has signaled done
+);
+
+    // ------------------------------------------------------------------
+    // wires connecting the five submodules
+    // ------------------------------------------------------------------
+    state_t state;              // shared phase, driven by scheduler
+    logic [4:0] thread_id;
+
+    logic [31:0] instr;
+
+    logic [6:0] opcode;
+    logic [4:0] rd, rs1, rs2;
+    logic [2:0] funct3;
+    logic [6:0] funct7;
+    logic [31:0] imm;
+
+    logic [31:0] pc;            // current pc: pc.sv output -> cpu.sv input
+    logic [31:0] rs1_val [0:31], rs2_val [0:31];  // register values, one per lane. pc.sv only needs
+                                                    // ONE lane's copy (the leader lane) to resolve
+                                                    // branches -- picking which lane and wiring it
+                                                    // into pc.sv is step #3, not done yet.
+    logic        done [0:31];                     // per-lane done, feeds scheduler's kernel_done reduction
+
+    // ------------------------------------------------------------------
+    // 1. scheduler - owns the shared state machine, decides when to move
+    //    S_FETCH -> S_FETCH_WAIT -> S_EXECUTE -> ... -> S_WRITEBACK
+    // ------------------------------------------------------------------
+    scheduler u_scheduler (.*);
+
+    // ------------------------------------------------------------------
+    // 2. fetcher - latches mem_rdata into instr. The fetch *address* is
+    //    driven onto mem_addr by cpu.sv below (it muxes pc vs ea).
+    // ------------------------------------------------------------------
+    // mem_rdata is now a per-lane array; every lane sees the identical
+    // address during fetch (all present pc), so any lane's copy is valid --
+    // explicitly picking lane 0, same leader-lane convention used for pc.sv.
+    fetcher u_fetcher (.*, .mem_rdata(mem_rdata[0]));
+
+    // ------------------------------------------------------------------
+    // 3. decoder - splits instr into opcode/rd/rs1/rs2/funct3/funct7/imm
+    // ------------------------------------------------------------------
+    decoder u_decoder (.*);
+
+    // ------------------------------------------------------------------
+    // 4. cpu - register file + ALU + load/store, also drives mem_addr.
+    //    32 lanes, one per thread. clk/rst/state/pc/opcode/rd/rs1/rs2/
+    //    funct3/funct7/imm are the *same* wire fanned out to all 32 (SIMD
+    //    lockstep -- matched by .* below). thread_id/mem_addr/mem_rdata/
+    //    rs1_val/rs2_val differ per lane, so those are connected
+    //    explicitly to array element [i], overriding the .* match for
+    //    just those ports.
+    // ------------------------------------------------------------------
+    genvar i;
+    generate
+        for (i = 0; i < 32; i++) begin : lane
+            cpu u_cpu (
+                .*,
+                .thread_id(i[4:0]),
+                .mem_rdata(mem_rdata[i]),
+                .mem_addr(mem_addr[i]), // output
+                .rs1_val(rs1_val[i]),
+                .rs2_val(rs2_val[i]),
+                .mem_read(mem_read[i]),
+                .mem_write(mem_write[i]),
+                .mem_wdata(mem_wdata[i]),
+                .byte_en(byte_en[i]),
+                .done(done[i])
+            );
+        end
+    endgenerate
+
+    // ------------------------------------------------------------------
+    // 5. pc - computes next pc from branch/jump condition. rs1_val/rs2_val
+    //    are now per-lane arrays (one per thread), but pc.sv only takes a
+    //    single scalar rs1_val/rs2_val -- it needs exactly one lane's
+    //    values to resolve a branch for the whole core. We designate lane
+    //    0 the "leader lane": its registers decide every branch/jump for
+    //    all 32 lanes. This assumes uniform control flow -- every thread
+    //    must agree on the branch outcome, since only lane 0's registers
+    //    are actually consulted. Divergent per-thread branching isn't
+    //    supported by this design.
+    // ------------------------------------------------------------------
+    pc u_pc (
+        .*,
+        .rs1_val(rs1_val[0]),
+        .rs2_val(rs2_val[0])
+    );
+
+endmodule
