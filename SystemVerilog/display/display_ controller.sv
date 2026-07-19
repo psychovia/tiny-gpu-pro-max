@@ -28,6 +28,9 @@ module display_controller #(
     output logic [7:0]  vga_g,
     output logic [7:0]  vga_b
 );
+    localparam int SCALE_X = SCREEN_WIDTH  / IMG_WIDTH;
+    localparam int SCALE_Y = SCREEN_HEIGHT / IMG_HEIGHT;
+
     logic hs, vs, blank;
     logic [9:0] row, col;
     logic frame_complete;
@@ -42,25 +45,30 @@ module display_controller #(
     // shared_mem has 1-cycle read latency — delay HS/VS/blank by one
     // cycle so they land alongside the pixel data they actually correspond to
     logic hs_prev, vs_prev, blank_prev;
-    always_ff @(posedge clock_40MHz) begin
-        hs_prev    <= vs;
+    always_ff @(posedge clk) begin
+        hs_prev    <= hs;
         vs_prev    <= vs;
         blank_prev <= blank;
     end
 
-    assign disp_addr = compute_done
+    // ready: high once the whole kernel (every block) has finished --
+    // same signal as core.sv's kernel_done, wired in via gpu.sv.
+    assign disp_addr = ready
         ? gpu_pkg::IMG_BASE + ((row / SCALE_Y) * IMG_WIDTH + (col / SCALE_X))
         : gpu_pkg::IMG_BASE;
 
-    assign hs = hs_prev;
-    assign vs = vs_prev;
-    assign blank_out = blank_prev || !compute_done;
+    assign hsync = hs_prev;
+    assign vsync = vs_prev;
+    assign video_active = ~blank_prev;
 
-    // if compute done - diaplay rgb else '0(black)
+    // if compute done - display rgb, else '0 (black)
+    logic blank_out;
+    assign blank_out = blank_prev || !ready;
+
     logic [7:0] luma;
     assign luma = disp_rdata[7:0];
-    assign r = blank_out ? 8'd0 : luma;
-    assign g = blank_out ? 8'd0 : luma;
-    assign b = blank_out ? 8'd0 : luma;
+    assign vga_r = blank_out ? 8'd0 : luma;
+    assign vga_g = blank_out ? 8'd0 : luma;
+    assign vga_b = blank_out ? 8'd0 : luma;
 
 endmodule : display_controller

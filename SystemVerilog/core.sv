@@ -45,6 +45,7 @@ module core (
                                                     // into pc.sv is step #3, not done yet.
     logic        done [0:31];                     // per-lane done, feeds scheduler's block_done reduction
     logic        block_start;                     // pulses when advancing to the next block; resets pc/regs/done like rst does, without touching block_id
+    logic        stall;                           // scheduler.sv output -- not yet consumed by any lane; pc.sv/cpu.sv will pick this up via .* once they gain a stall input
 
     // ------------------------------------------------------------------
     // 1. scheduler - owns the shared state machine, decides when to move
