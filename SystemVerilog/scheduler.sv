@@ -9,9 +9,11 @@ scheduler
     detect different pcs among threads
         - if different - pick an arbitrary pc to work on, stall the rest, continue when done
 
-    lane     = physical instances of units
-    threads  = total number of computation
-    block    =shifts
+    lane     = physical instances of units - number of workers
+    threads  = total amount of computation - total amount of work
+    block    = "shift"
+
+    hierarchy: kernal - block - thread
 
 **/
 
@@ -21,29 +23,30 @@ scheduler
 import gpu_pkg::*;
 
 module scheduler #(
-    parameter int LANES         = gpu_pkg::N_LANES,                         // physical cpu lanes = threads per block
+    parameter int LANES         = gpu_pkg::N_LANES,                          // physical cpu lanes = threads per block
     parameter int TOTAL_THREADS = gpu_pkg::IMG_WIDTH * gpu_pkg::IMG_HEIGHT,  // one thread per pixel
-    parameter int N_BLOCKS      = (TOTAL_THREADS + LANES - 1) / LANES       // compile-time, from image size
+    parameter int N_BLOCKS      = (TOTAL_THREADS + LANES - 1) / LANES        // compile-time, from image size
 ) (
-    // ---- inputs ----
-    input  logic        clk, rst,             // FROM: whatever instantiates core.sv (gpu_top.sv / testbench)
-    input  logic [6:0]  opcode,               // FROM: decoder.sv -- decoded opcode of the currently fetched instr
+    input  logic clk, rst,
+
+    // from fetcher
+    input  logic [6:0] opcode,
+
+    // from pc.sv
     input  logic [31:0] next_pc,              // FROM: pc.sv -- leader-lane's resolved branch/jump target.
                                                // pc.sv needs to expose this (its internal `next_pc` reg) as
                                                // an output instead of owning the final registered pc itself --
                                                // scheduler now owns per-lane pc storage below. Not done yet.
-    input  logic        done [0:LANES-1],     // FROM: cpu.sv -- each of the 32 lane instances' sticky done output
+    // from/to cpu
+    input  logic        done [0:LANES-1], // sticky - stays same until rst
+    output logic [31:0] pc   [0:LANES-1], 
+    output logic [31:0] thread_base,      // lane i's thread_id = thread_base + i
+    
+    // to fetcher
+    output state_t state,
 
-    // ---- outputs ----
-    output state_t       state,               // TO: fetcher.sv, cpu.sv (all lanes), pc.sv -- shared FSM phase
-                                               // they all key off to know when to latch/act
-    output logic [31:0]  pc [0:LANES-1],      // TO: cpu.sv -- lane i's own pc input (once core.sv wires it in,
-                                               // replacing the old single shared pc.sv wire). NEW.
-    output logic [31:0]  thread_base,         // TO: cpu.sv -- lane i's thread_id = thread_base + i (once
-                                               // core.sv wires it in, replacing the raw loop index). NEW.
-    output logic         kernel_done          // TO: core.sv -- forwarded straight through as core's own
-                                               // kernel_done output; existing, semantics widened to mean
-                                               // "every block finished," not just the current one
+    // to core
+    output logic kernel_done  // when every block is done
 );
 
     // ------------------------------------------------------------------
@@ -68,21 +71,18 @@ module scheduler #(
             S_EXECUTE: begin
                 // branch on opcode
                 case (opcode)
-                    // do some math logic (R-type / I-type arithmetic / lui / auipc / jal / jalr / branches -> S_WRITEBACK)
+                    // R-type / I-type arithmetic / lui / auipc / jump/ branches -> S_WRITEBACK)
                     // bc result can be calculated in execute w/o reading/writing data memory
                     7'b0110011, 7'b0010011, 7'b0110111, 7'b0010111, 7'b1101111, 7'b1100111, 7'b1100011:
                         next_state = S_WRITEBACK;
-                    // load something out of memory/filing cabinet (memory -> register)
-                    // store something in cabinet (register -> memory)
-                    // (loads / stores -> S_MEM_ADDR)
+                    // load / store between memory & register
                     7'b0000011, 7'b0100011:
                         next_state = S_MEM_ADDR;
                     default: next_state = S_WRITEBACK;
                 endcase
             end
-            // if loading (0000011) go to S_MEM_WAIT, otherwise store (0100011) 
             S_MEM_ADDR: begin
-                next_state = (opcode == 7'b0000011) ? S_MEM_WAIT : S_WRITEBACK;
+                next_state = (opcode == 7'b0000011) ? S_MEM_WAIT : S_WRITEBACK; // if loading then wait else writeback
             end
             S_MEM_WAIT: next_state = S_WRITEBACK;
 
@@ -96,7 +96,7 @@ module scheduler #(
     // ------------------------------------------------------------------
     localparam int BLOCK_ID_W = (N_BLOCKS > 1) ? $clog2(N_BLOCKS) : 1;
     logic [BLOCK_ID_W-1:0] block_id;
-    logic                  block_done;   // every lane assigned to *this* block has finished
+    logic                  block_done;   // every lane in this block has finished
     logic                  last_block;
 
     assign last_block  = (block_id == N_BLOCKS-1);
