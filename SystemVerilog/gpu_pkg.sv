@@ -6,6 +6,7 @@ library of macros / constants
 package gpu_pkg;
 
     parameter int N_THREADS       = 4;
+    parameter int N_LANES         = 32;   // physical cpu lanes in core.sv == threads per block for scheduler.sv
     parameter int IMG_WIDTH       = 64;
     parameter int IMG_HEIGHT      = 64;
     parameter int BYTES_PER_PIXEL = 4;

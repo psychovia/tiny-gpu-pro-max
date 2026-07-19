@@ -9,7 +9,9 @@ scheduler
     detect different pcs among threads
         - if different - pick an arbitrary pc to work on, stall the rest, continue when done
 
-    block
+    lane     = physical instances of units
+    threads  = total number of computation
+    block    =shifts
 
 **/
 
@@ -18,33 +20,43 @@ scheduler
 
 import gpu_pkg::*;
 
-module scheduler(
-    input clk, rst,
-    input logic [6:0] opcode,
-    output logic [4:0] thread_id,
-    output state_t state,          // exposed so core.sv can hand the shared phase to fetcher/cpu/pc
-    input  logic done [0:31],
-    output logic kernel_done
+module scheduler #(
+    parameter int LANES         = gpu_pkg::N_LANES,                         // physical cpu lanes = threads per block
+    parameter int TOTAL_THREADS = gpu_pkg::IMG_WIDTH * gpu_pkg::IMG_HEIGHT,  // one thread per pixel
+    parameter int N_BLOCKS      = (TOTAL_THREADS + LANES - 1) / LANES       // compile-time, from image size
+) (
+    // ---- inputs ----
+    input  logic        clk, rst,             // FROM: whatever instantiates core.sv (gpu_top.sv / testbench)
+    input  logic [6:0]  opcode,               // FROM: decoder.sv -- decoded opcode of the currently fetched instr
+    input  logic [31:0] next_pc,              // FROM: pc.sv -- leader-lane's resolved branch/jump target.
+                                               // pc.sv needs to expose this (its internal `next_pc` reg) as
+                                               // an output instead of owning the final registered pc itself --
+                                               // scheduler now owns per-lane pc storage below. Not done yet.
+    input  logic        done [0:LANES-1],     // FROM: cpu.sv -- each of the 32 lane instances' sticky done output
+
+    // ---- outputs ----
+    output state_t       state,               // TO: fetcher.sv, cpu.sv (all lanes), pc.sv -- shared FSM phase
+                                               // they all key off to know when to latch/act
+    output logic [31:0]  pc [0:LANES-1],      // TO: cpu.sv -- lane i's own pc input (once core.sv wires it in,
+                                               // replacing the old single shared pc.sv wire). NEW.
+    output logic [31:0]  thread_base,         // TO: cpu.sv -- lane i's thread_id = thread_base + i (once
+                                               // core.sv wires it in, replacing the raw loop index). NEW.
+    output logic         kernel_done          // TO: core.sv -- forwarded straight through as core's own
+                                               // kernel_done output; existing, semantics widened to mean
+                                               // "every block finished," not just the current one
 );
 
+    // ------------------------------------------------------------------
+    // 1. shared FSM -- same states/transitions as before. Gated on
+    //    kernel_done (the WHOLE dispatch finished), not just this block --
+    //    a block with some lanes done early still needs to keep cycling
+    //    S_FETCH..S_WRITEBACK for whichever lanes are still working.
+    // ------------------------------------------------------------------
     state_t next_state;
 
-    // kernel_done true if all lanes are done
-    logic kernel_done_comb;
-    always_comb begin
-        kernel_done_comb = 1'b1;
-        for (int i = 0; i < 32; i++) begin
-            kernel_done_comb = kernel_done_comb & done[i];
-        end
-    end
-    assign kernel_done = kernel_done_comb;
-
-    // state register
-    // freezes once kernel_done; stop advancing/fetching once the
-    // whole kernel has finished, instead of looping past the end forever.
     always_ff @(posedge clk) begin
-        if (rst) state <= S_FETCH;
-        else if (~kernel_done) state <= next_state;
+        if (rst)               state <= S_FETCH;
+        else if (!kernel_done) state <= next_state;
     end
 
     // next state logic
@@ -77,6 +89,58 @@ module scheduler(
             S_WRITEBACK:  next_state = S_FETCH;
             default:      next_state = S_FETCH;
         endcase
+    end
+
+    // ------------------------------------------------------------------
+    // 2. block bookkeeping
+    // ------------------------------------------------------------------
+    localparam int BLOCK_ID_W = (N_BLOCKS > 1) ? $clog2(N_BLOCKS) : 1;
+    logic [BLOCK_ID_W-1:0] block_id;
+    logic                  block_done;   // every lane assigned to *this* block has finished
+    logic                  last_block;
+
+    assign last_block  = (block_id == N_BLOCKS-1);
+    assign kernel_done = block_done && last_block;
+    assign thread_base = block_id * LANES;
+
+    // TODO(blocking): done[i] is sticky in cpu.sv and only clears on global
+    // rst, so the instant block 0 finishes, block 1 would see every lane
+    // already "done" and block_id would race through every remaining block
+    // in a few cycles without doing any real work. Needs either (a) a
+    // per-block clear pulse added to cpu.sv, or (b) scheduler latching its
+    // own block-local done bits off a one-shot "lane just finished" strobe
+    // instead of reading cpu.sv's sticky flag directly. Not resolved here --
+    // block advance below is structurally right but not functionally correct
+    // until this is fixed.
+    always_comb begin
+        block_done = 1'b1;
+        for (int i = 0; i < LANES; i++) block_done &= done[i];
+    end
+
+    always_ff @(posedge clk) begin
+        if (rst) begin
+            block_id <= '0;
+        end else if (state == S_WRITEBACK && block_done && !last_block) begin
+            block_id <= block_id + 1'b1;
+        end
+    end
+
+    // ------------------------------------------------------------------
+    // 3. per-lane pc -- lockstep: every still-running lane advances to the
+    //    same next_pc (resolved once, off the leader lane, by pc.sv). A lane
+    //    that's already done freezes at its last value instead of following
+    //    the rest of the block. A new block starts every lane fresh at 0.
+    // ------------------------------------------------------------------
+    always_ff @(posedge clk) begin
+        if (rst) begin
+            for (int i = 0; i < LANES; i++) pc[i] <= 32'd0;
+        end else if (state == S_WRITEBACK && block_done && !last_block) begin
+            for (int i = 0; i < LANES; i++) pc[i] <= 32'd0;   // next block re-runs the kernel from the top
+        end else if (state == S_WRITEBACK) begin
+            for (int i = 0; i < LANES; i++) begin
+                if (!done[i]) pc[i] <= next_pc;
+            end
+        end
     end
 
 endmodule
