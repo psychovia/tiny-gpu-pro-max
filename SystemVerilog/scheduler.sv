@@ -33,11 +33,13 @@ module scheduler #(
     input  logic [6:0] opcode,
 
     // from pc.sv
-    input  logic [31:0] next_pc,
-
+    input  logic [31:0] next_pc,              // FROM: pc.sv -- leader-lane's resolved branch/jump target.
+                                               // pc.sv needs to expose this (its internal `next_pc` reg) as
+                                               // an output instead of owning the final registered pc itself --
+                                               // scheduler now owns per-lane pc storage below. Not done yet.
     // from/to cpu
-    input  logic        done    [0:LANES-1], // sticky - stays same until rst
-    output logic [31:0] pc      [0:LANES-1], 
+    input  logic        done [0:LANES-1], // sticky - stays same until rst
+    output logic [31:0] pc   [0:LANES-1], 
     output logic [31:0] thread_base,      // lane i's thread_id = thread_base + i
     
     // to fetcher
@@ -47,8 +49,12 @@ module scheduler #(
     output logic kernel_done  // when every block is done
 );
 
-    // FSM
-    // keep running for undone lanes in a block
+    // ------------------------------------------------------------------
+    // 1. shared FSM -- same states/transitions as before. Gated on
+    //    kernel_done (the WHOLE dispatch finished), not just this block --
+    //    a block with some lanes done early still needs to keep cycling
+    //    S_FETCH..S_WRITEBACK for whichever lanes are still working.
+    // ------------------------------------------------------------------
     state_t next_state;
 
     always_ff @(posedge clk) begin
@@ -65,7 +71,7 @@ module scheduler #(
             S_EXECUTE: begin
                 // branch on opcode
                 case (opcode)
-                    // R-type / I-type / lui / auipc / jmp / branch
+                    // R-type / I-type arithmetic / lui / auipc / jump/ branches -> S_WRITEBACK)
                     // bc result can be calculated in execute w/o reading/writing data memory
                     7'b0110011, 7'b0010011, 7'b0110111, 7'b0010111, 7'b1101111, 7'b1100111, 7'b1100011:
                         next_state = S_WRITEBACK;
@@ -85,12 +91,12 @@ module scheduler #(
         endcase
     end
 
-    
-
-    // block
+    // ------------------------------------------------------------------
+    // 2. block bookkeeping
+    // ------------------------------------------------------------------
     localparam int BLOCK_ID_W = (N_BLOCKS > 1) ? $clog2(N_BLOCKS) : 1;
     logic [BLOCK_ID_W-1:0] block_id;
-    logic                  block_done; // every lane in this block has finished
+    logic                  block_done;   // every lane in this block has finished
     logic                  last_block;
 
     assign last_block  = (block_id == N_BLOCKS-1);
@@ -100,10 +106,12 @@ module scheduler #(
     // TODO(blocking): done[i] is sticky in cpu.sv and only clears on global
     // rst, so the instant block 0 finishes, block 1 would see every lane
     // already "done" and block_id would race through every remaining block
-    // in a few cycles without doing any real work. Needs either 
-    // (a) a per-block clear pulse added to cpu.sv
-    // (b) scheduler latching its own block-local done bits off a one-shot "lane just finished" strobe
-
+    // in a few cycles without doing any real work. Needs either (a) a
+    // per-block clear pulse added to cpu.sv, or (b) scheduler latching its
+    // own block-local done bits off a one-shot "lane just finished" strobe
+    // instead of reading cpu.sv's sticky flag directly. Not resolved here --
+    // block advance below is structurally right but not functionally correct
+    // until this is fixed.
     always_comb begin
         block_done = 1'b1;
         for (int i = 0; i < LANES; i++) block_done &= done[i];
@@ -117,16 +125,17 @@ module scheduler #(
         end
     end
 
-
-    // per-lane pc
-    // running lane - next pc
-    // done lane - stay at last value
-    // new block starts at lane 0
+    // ------------------------------------------------------------------
+    // 3. per-lane pc -- lockstep: every still-running lane advances to the
+    //    same next_pc (resolved once, off the leader lane, by pc.sv). A lane
+    //    that's already done freezes at its last value instead of following
+    //    the rest of the block. A new block starts every lane fresh at 0.
+    // ------------------------------------------------------------------
     always_ff @(posedge clk) begin
         if (rst) begin
             for (int i = 0; i < LANES; i++) pc[i] <= 32'd0;
         end else if (state == S_WRITEBACK && block_done && !last_block) begin
-            for (int i = 0; i < LANES; i++) pc[i] <= 32'd0;   // next block re-runs kernel from the top
+            for (int i = 0; i < LANES; i++) pc[i] <= 32'd0;   // next block re-runs the kernel from the top
         end else if (state == S_WRITEBACK) begin
             for (int i = 0; i < LANES; i++) begin
                 if (!done[i]) pc[i] <= next_pc;
