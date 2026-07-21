@@ -26,7 +26,7 @@ module shared_mem #(
     parameter string INIT_FILE      = "mems/kernel.mem"
 ) (
     input  logic         clk, rst,
-    input  logic [31:0]  addr      [0:N_THREADS-1],
+    input  logic [31:0]  mem_addr  [0:N_THREADS-1], // per-lane address -- named to match core.sv/cpu.sv's mem_addr (was "addr", which .*-instantiation in gpu.sv silently failed to connect since names didn't match)
 
     // cpu / thread
     input  logic         mem_read  [0:N_THREADS-1],
@@ -123,7 +123,7 @@ module shared_mem #(
             for (int i = 0; i < N_THREADS; i++) mem_valid[i] <= 1'b0;  // default low each cycle
 
             if (grant_valid) begin
-                word_idx = addr[granted_lane][15:2];
+                word_idx = mem_addr[granted_lane][15:2];
 
                 if (mem_write[granted_lane]) begin
                     // byte-masked write — same pattern as the original cpu.sv (lines 206-211)
@@ -195,10 +195,10 @@ module shared_mem #(
     // ============================================================
     // synthesis translate_off
     always_ff @(posedge clk) begin
-        if (grant_valid & mem_write[granted_lane] & addr[granted_lane][31:16] != 16'h0000) begin
+        if (grant_valid & mem_write[granted_lane] & mem_addr[granted_lane][31:16] != 16'h0000) begin
             assert(byte_en[granted_lane] == 4'b0000)
                 else $error("shared_mem saw a real write (byte_en=0x%h) to an MMIO address (0x%h) from lane %0d — cpu.sv should have zeroed byte_en for this",
-                            byte_en[granted_lane], addr[granted_lane], granted_lane);
+                            byte_en[granted_lane], mem_addr[granted_lane], granted_lane);
         end
     end
     // synthesis translate_on
