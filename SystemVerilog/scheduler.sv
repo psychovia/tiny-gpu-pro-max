@@ -19,14 +19,13 @@ import gpu_pkg::*;
 module scheduler(
     input clk, rst,
     input logic [6:0] opcode,
-    output logic [4:0] thread_id,
+    input logic done [0:31],
+    input logic [31:0] pc,
     output state_t state,          // exposed so core.sv can hand the shared phase to fetcher/cpu/pc
-    input  logic done [0:31],
     output logic block_done,
     output logic kernel_done,
     output logic [gpu_pkg::BLOCK_ID_WIDTH-1:0] block_id,
     output logic block_start,
-    input logic [31:0] pc,
     output logic stall
 );
 

@@ -6,7 +6,6 @@ module cpu (
     input logic clk, rst,
     input logic block_start,   // pulses when advancing to the next block; resets regs/done like rst does
     input state_t state,       // shared phase, driven by scheduler.sv
-    input logic [4:0] thread_id,
     input logic [6:0] opcode,
     input logic [4:0] rd, rs1, rs2,
     input logic [2:0] funct3,
@@ -36,7 +35,6 @@ module cpu (
     logic [31:0] regs [0:31];
 
     logic [31:0] alu_result;
-
 
 
     // ------------------------------------------------------------------
@@ -86,13 +84,15 @@ module cpu (
     assign mem_write = (state == S_MEM_ADDR & opcode == 7'b0100011); // s-type
     assign mem_read = (state == S_FETCH) | (state == S_FETCH_WAIT) |
                        (state == S_EXECUTE) | (state == S_WRITEBACK) |
-                       ((state == S_MEM_ADDR | state == S_MEM_WAIT) & opcode == 7'b0000011);
+                       ((state == S_MEM_ADDR | state == S_MEM_WAIT) & opcode == 7'b0000011); // l-type loading from memory to register
 
-    // byte enable to flag which bytes we are writing over
+    // A word is 4 mail slots in a row; a store only wants to drop a letter
+    // into 1 (sb) or 2 (sh) of them. ea[1:0] says which slot to start at,
+    // so we slide the "letters here" mask over by that many slots.
     logic [3:0] byte_en_comb;
     always_comb begin
         case (funct3)
-            3'b000:  byte_en_comb = 4'b0001 << ea[1:0]; // sb
+            3'b000:  byte_en_comb = 4'b0001 << ea[1:0]; // one hot encoding so 0001 refers to one byte that should be replaced and then ea[1:0] shifts the to which byte supposed to store - sb
             3'b001:  byte_en_comb = 4'b0011 << ea[1:0]; // sh
             3'b010:  byte_en_comb = 4'b1111;            // sw
             default: byte_en_comb = 4'b0000;
@@ -106,7 +106,7 @@ module cpu (
     logic [31:0] mem_wdata_comb;
     always_comb begin
         case (funct3)
-            3'b000:  mem_wdata_comb = {24'd0, rs2_val[7:0]}  << byte_shift; // sb
+            3'b000:  mem_wdata_comb = {24'd0, rs2_val[7:0]}  << byte_shift; // sb - like {24'd0, rs2_val[7:0]} is the what is getting written and then byte_shift shifts into correct position
             3'b001:  mem_wdata_comb = {16'd0, rs2_val[15:0]} << byte_shift; // sh
             3'b010:  mem_wdata_comb = rs2_val;                              // sw
             default: mem_wdata_comb = 32'd0;
@@ -163,7 +163,7 @@ module cpu (
         if (rst | block_start) begin
             done <= 1'b0;
         end
-        else if (is_ALU_RESULT && rd == 5'd31 && alu_result == 32'd1) begin
+        else if (is_ALU_RESULT & rd == 5'd31 & alu_result == 32'd1) begin
             done <= 1'b1;
         end
     end

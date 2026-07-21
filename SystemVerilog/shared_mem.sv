@@ -4,17 +4,17 @@
 - frame buffer B - results, to be outputed
 - metadata - tid / width / etc
 
-    e.g.
-    apply a foo filter on an image
+e.g.
+apply a foo filter on an image
 
-    instruction - stores instr of a function named "foo"
-    fb_A - source image, indexed by position of pixel, each entry is rgb val of corresponding pixel
-    fb_B - result image with the filter applied, same structure as fb_A
-    
-    fb_B[pixel_idx] = filter(fb_A[pixel_idx])
+instruction - stores instr of a function named "foo"
+fb_A - source image, indexed by position of pixel, each entry is rgb val of corresponding pixel
+fb_B - result image with the filter applied, same structure as fb_A
 
-    ** overwrite in place - one large fram buffer instead of separating A / B
-    - works if output format / size identical to input
+fb_B[pixel_idx] = filter(fb_A[pixel_idx])
+
+** overwrite in place - one large frame buffer instead of separating A / B
+- works if output format / size identical to input
 
 **/
 
@@ -34,7 +34,7 @@ module shared_mem #(
     input  logic [31:0]  mem_wdata [0:N_THREADS-1],
     input  logic [3:0]   byte_en   [0:N_THREADS-1],
     output logic [31:0]  mem_rdata [0:N_THREADS-1],
-    output logic         mem_valid [0:N_THREADS-1],
+    output logic         mem_valid [0:N_THREADS-1], // tells lane i that the value sitting in mem_rdata[i] this cycle is your actual requested data and right now is where it's safe to read it
 
     // display
     input  logic [31:0]  disp_addr,
@@ -56,19 +56,19 @@ module shared_mem #(
     // ============================================================
     // Port A: arbitration
     // Only one thread can access memory per cycle, so pick exactly
-    // one requester ("granted_lane") out of however many have req=1.
+    // one requester ("granted_lane") out of however many have mem_read or mem_write at once.
     // Fixed priority for now (lowest index always wins ties) — fine
     // given a short kernel and roughly-synced threads. Revisit with
     // round-robin only if a thread is observed stalling badly.
     // ============================================================
     logic [$clog2(N_THREADS)-1:0] granted_lane;
-    logic                          grant_valid;
+    logic                          grant_valid; //is there at least one lane requesting meory right now?
 
     always_comb begin
         granted_lane = '0;
         grant_valid  = 1'b0;
         for (int i = 0; i < N_THREADS; i++) begin
-            if ((mem_read[i] | mem_write[i]) && !grant_valid) begin
+            if ((mem_read[i] | mem_write[i]) & ~grant_valid) begin
                 granted_lane = i[$clog2(N_THREADS)-1:0];
                 grant_valid  = 1'b1;
             end
@@ -81,8 +81,7 @@ module shared_mem #(
     // this cycle, data out next cycle — same behavior cpu.sv's
     // original private `mem` array already had).
     // ============================================================
-    logic [$clog2(N_THREADS)-1:0] granted_lane_prev;
-    logic [13:0]                   word_idx;
+    logic [13:0] word_idx;
 
     always_ff @(posedge clk) begin
         if (rst) begin
@@ -101,9 +100,12 @@ module shared_mem #(
                     if (byte_en[granted_lane][3]) mem[word_idx][31:24] <= mem_wdata[granted_lane][31:24];
                 end
 
-                mem_rdata[granted_lane_prev] <= mem[word_idx];
-                mem_valid[granted_lane_prev] <= 1'b1;
-                granted_lane_prev            <= granted_lane;
+                // registered outputs -- address goes in this cycle, so this
+                // naturally lands in mem_rdata/mem_valid one cycle later
+                // (matches synchronous BRAM timing), with no need to track
+                // who won arbitration last cycle.
+                mem_rdata[granted_lane] <= mem[word_idx];
+                mem_valid[granted_lane] <= 1'b1;
             end
         end
     end

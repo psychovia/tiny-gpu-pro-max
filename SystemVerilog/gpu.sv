@@ -32,46 +32,10 @@ module gpu (
     logic [31:0] disp_addr;
     logic [31:0] disp_rdata;
 
-    core u_core (
-        .clk(clk),
-        .rst(rst),
-        .mem_rdata (mem_rdata),
-        .mem_addr  (mem_addr),
-        .mem_read  (mem_read),
-        .mem_write (mem_write),
-        .mem_wdata (mem_wdata),
-        .byte_en   (byte_en),
-        .block_done  (block_done),
-        .kernel_done (kernel_done),
-        .block_id    (block_id)
-    );
+    core u_core (.*);
 
-    shared_mem u_shared_mem (
-        .clk (clk),
-        .rst (rst),
-        .addr      (mem_addr),
-        .mem_read  (mem_read),
-        .mem_write (mem_write),
-        .mem_wdata (mem_wdata),
-        .byte_en   (byte_en),
-        .mem_rdata (mem_rdata),
-        .mem_valid (mem_valid),
-        .disp_addr (disp_addr),
-        .disp_rdata(disp_rdata)
-    );
+    shared_mem u_shared_mem (.*);
 
-    display_controller u_display_controller (
-        .clk(clk),
-        .rst(rst),
-        .ready(kernel_done),
-        .disp_rdata(disp_rdata),
-        .disp_addr (disp_addr),
-        .hsync(hsync),
-        .vsync(vsync),
-        .video_active(video_active),
-        .vga_r(vga_r),
-        .vga_g(vga_g),
-        .vga_b(vga_b)
-    );
+    display_controller u_display_controller (.*);
 
 endmodule : gpu
