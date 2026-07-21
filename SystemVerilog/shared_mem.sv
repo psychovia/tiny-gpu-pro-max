@@ -176,17 +176,29 @@ module shared_mem #(
     end
 
     // ============================================================
-    // TODO(sanity check, sim-only): catch MMIO addresses that leaked
-    // through here instead of being intercepted inside cpu.sv. Should
-    // never fire if cpu.sv's is_mmio logic is correct — if it does
-    // fire, that's a bug in cpu.sv, not here.
+    // TODO(sanity check, sim-only): MMIO addresses are EXPECTED to reach
+    // shared_mem now -- cpu.sv deliberately lets an MMIO-targeted lane
+    // still get arbitrated/serviced normally (so scheduler.sv's stall
+    // logic doesn't hang waiting on a lane that never requests), and
+    // instead relies on cpu.sv forcing byte_en to all-zero for MMIO
+    // stores so no real bytes ever get written. So this can't check
+    // "MMIO never appears here" anymore -- it checks the actual safety
+    // contract instead: an MMIO-addressed write must always carry
+    // byte_en == 0. If that ever fails, cpu.sv's is_mmio/byte_en
+    // neutralization is broken, not this file.
+    //
+    // Like a museum's "look but don't touch" display case: visitors
+    // (requests) are fine to walk up to it (grant_valid) -- that's not
+    // suspicious anymore. The alarm only trips if a toucher (mem_write)
+    // at that case (MMIO address) actually leaves a smudge on the glass
+    // (byte_en nonzero) -- proof cpu.sv didn't wipe their hands first.
     // ============================================================
     // synthesis translate_off
     always_ff @(posedge clk) begin
-        if (grant_valid) begin
-            assert(addr[granted_lane][31:16] == 16'h0000)
-                else $error("shared_mem saw an MMIO address (0x%h) from lane %0d — cpu.sv's MMIO intercept should have caught this",
-                            addr[granted_lane], granted_lane);
+        if (grant_valid & mem_write[granted_lane] & addr[granted_lane][31:16] != 16'h0000) begin
+            assert(byte_en[granted_lane] == 4'b0000)
+                else $error("shared_mem saw a real write (byte_en=0x%h) to an MMIO address (0x%h) from lane %0d — cpu.sv should have zeroed byte_en for this",
+                            byte_en[granted_lane], addr[granted_lane], granted_lane);
         end
     end
     // synthesis translate_on

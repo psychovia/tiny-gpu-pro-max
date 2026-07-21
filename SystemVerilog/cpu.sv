@@ -45,6 +45,18 @@ module cpu (
 
     assign mem_addr = (state == S_MEM_ADDR || state == S_MEM_WAIT) ? ea : pc;
 
+    // MMIO_BASE (gpu_pkg.sv) reserves a slice of the address space for
+    // future device registers rather than real memory -- nothing generates
+    // an MMIO address today (no compiler/program targets it yet), but if a
+    // load/store's `ea` ever landed there, it must NOT be allowed to fall
+    // through to shared_mem.sv, since word_idx only looks at the low bits
+    // of the address and would silently alias into real program/image
+    // memory. This is a defensive stub only: it makes MMIO accesses inert
+    // (loads read 0, stores are dropped) rather than defining real device
+    // behavior, which depends on hardware/toolchain decisions not made yet.
+    logic is_mmio;
+    assign is_mmio = (ea[31:16] == MMIO_BASE[31:16]);
+
     // ea[1:0] gives the byte offset within the 32-bit word (0-3).
     // Multiplying by 8 converts byte offset to bit offset so we can
     // extract the right byte(s) from mem_rdata using +: 8 or +: 16.
@@ -56,14 +68,18 @@ module cpu (
     // loading out of the memory
     always_ff @(posedge clk) begin
         if (state == S_MEM_WAIT) begin
-            case(funct3)
-                3'b000: load_result <= {{24{mem_rdata[byte_shift+7]}}, mem_rdata[byte_shift +: 8]}; //lb sign extended
-                3'b001: load_result <= {{16{mem_rdata[byte_shift+15]}}, mem_rdata[byte_shift +: 16]}; //lh sign extended
-                3'b010: load_result <= mem_rdata; //lw
-                3'b100: load_result <= {24'd0, mem_rdata[byte_shift +: 8]}; //lbu zero-extended
-                3'b101: load_result <= {16'd0, mem_rdata[byte_shift +: 16]};//lhu zero extended
-                default: load_result <= 32'd0;
-            endcase
+            if (is_mmio) begin
+                load_result <= 32'd0; // no real device behind MMIO_BASE yet -- reads as 0
+            end else begin
+                case(funct3)
+                    3'b000: load_result <= {{24{mem_rdata[byte_shift+7]}}, mem_rdata[byte_shift +: 8]}; //lb sign extended
+                    3'b001: load_result <= {{16{mem_rdata[byte_shift+15]}}, mem_rdata[byte_shift +: 16]}; //lh sign extended
+                    3'b010: load_result <= mem_rdata; //lw
+                    3'b100: load_result <= {24'd0, mem_rdata[byte_shift +: 8]}; //lbu zero-extended
+                    3'b101: load_result <= {16'd0, mem_rdata[byte_shift +: 16]};//lhu zero extended
+                    default: load_result <= 32'd0;
+                endcase
+            end
         end
     end
 
@@ -85,18 +101,29 @@ module cpu (
     assign mem_read = (state == S_FETCH) | (state == S_FETCH_WAIT) |
                        (state == S_EXECUTE) | (state == S_WRITEBACK) |
                        ((state == S_MEM_ADDR | state == S_MEM_WAIT) & opcode == 7'b0000011); // l-type loading from memory to register
+    // NOTE: mem_read/mem_write deliberately stay ungated by is_mmio -- an
+    // MMIO-targeted lane still needs to be granted+serviced normally so
+    // scheduler.sv's stall bookkeeping (which waits for every lane's
+    // mem_valid during S_MEM_ADDR) doesn't hang waiting on a lane that
+    // would otherwise never request anything. MMIO safety is enforced
+    // below instead, by neutralizing byte_en (no real bytes ever get
+    // written) and by the load_result override above (reads as 0).
 
     // A word is 4 mail slots in a row; a store only wants to drop a letter
     // into 1 (sb) or 2 (sh) of them. ea[1:0] says which slot to start at,
     // so we slide the "letters here" mask over by that many slots.
     logic [3:0] byte_en_comb;
     always_comb begin
-        case (funct3)
-            3'b000:  byte_en_comb = 4'b0001 << ea[1:0]; // one hot encoding so 0001 refers to one byte that should be replaced and then ea[1:0] shifts the to which byte supposed to store - sb
-            3'b001:  byte_en_comb = 4'b0011 << ea[1:0]; // sh
-            3'b010:  byte_en_comb = 4'b1111;            // sw
-            default: byte_en_comb = 4'b0000;
-        endcase
+        if (is_mmio) begin
+            byte_en_comb = 4'b0000; // no real device yet -- never actually commit bytes to shared_mem for an MMIO store, no matter what address it aliases to
+        end else begin
+            case (funct3)
+                3'b000:  byte_en_comb = 4'b0001 << ea[1:0]; // one hot encoding so 0001 refers to one byte that should be replaced and then ea[1:0] shifts the to which byte supposed to store - sb
+                3'b001:  byte_en_comb = 4'b0011 << ea[1:0]; // sh
+                3'b010:  byte_en_comb = 4'b1111;            // sw
+                default: byte_en_comb = 4'b0000;
+            endcase
+        end
     end
     assign byte_en = byte_en_comb;
 
