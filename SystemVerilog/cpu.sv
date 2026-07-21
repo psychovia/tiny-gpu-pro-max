@@ -98,8 +98,11 @@ module cpu (
 
 
     assign mem_write = (state == S_MEM_ADDR & opcode == 7'b0100011); // s-type
+    // Only assert mem_read when something actually needs the result:
+    // fetching the instruction (S_FETCH/S_FETCH_WAIT) or a load's data
+    // (S_MEM_ADDR/S_MEM_WAIT). Not S_EXECUTE/S_WRITEBACK -- instr was
+    // already latched, so reading again there was just wasted bandwidth.
     assign mem_read = (state == S_FETCH) | (state == S_FETCH_WAIT) |
-                       (state == S_EXECUTE) | (state == S_WRITEBACK) |
                        ((state == S_MEM_ADDR | state == S_MEM_WAIT) & opcode == 7'b0000011); // l-type loading from memory to register
     // NOTE: mem_read/mem_write deliberately stay ungated by is_mmio -- an
     // MMIO-targeted lane still needs to be granted+serviced normally so
