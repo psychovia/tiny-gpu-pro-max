@@ -37,7 +37,7 @@ module shared_mem #(
     output logic         mem_valid [0:N_THREADS-1], // tells lane i that the value sitting in mem_rdata[i] this cycle is your actual requested data and right now is where it's safe to read it
 
     // display
-    input  logic [31:0]  disp_addr,
+    input  logic [31:0]  disp_addr, // where does it get this from? display_controller
     output logic [31:0]  disp_rdata
 );
 
