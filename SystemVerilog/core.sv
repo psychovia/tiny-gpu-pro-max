@@ -14,6 +14,7 @@ import gpu_pkg::*;
 module core (
     input logic clk, rst,
     input  logic [31:0] mem_rdata [0:31], // one read-data word per lane (indexed by lane, not shared) -MEMORY.SV
+    input  logic        mem_valid [0:31], // one cycle pulse per lane -- "the data/write I asked for just landed." scheduler.sv uses this to know when it's safe to leave S_FETCH_WAIT/S_MEM_ADDR
     output logic [31:0] mem_addr  [0:31], // one address per lane; each cpu lane drives its own (pc during fetch, ea during load/store)
     output logic        mem_read  [0:31], // per lane -- asserted whenever that lane wants read data this cycle
     output logic        mem_write [0:31], // per lane -- asserted on the one cycle a store commits
@@ -44,7 +45,7 @@ module core (
                                                     // into pc.sv is step #3, not done yet.
     logic        done [0:31];                     // per-lane done, feeds scheduler's block_done reduction
     logic        block_start;                     // pulses when advancing to the next block; resets pc/regs/done like rst does, without touching block_id
-    logic        stall;                           // scheduler.sv output -- not yet consumed by any lane; pc.sv/cpu.sv will pick this up via .* once they gain a stall input
+    logic        stall;                           // scheduler.sv now drives this (freezes `state` until every lane it's waiting on has mem_valid) -- not yet consumed by pc.sv/cpu.sv themselves, since they still latch off `state` directly. Fine for now: freezing `state` already keeps them from advancing past a phase early.
 
     // ------------------------------------------------------------------
     // 1. scheduler - owns the shared state machine, decides when to move

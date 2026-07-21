@@ -57,18 +57,50 @@ module shared_mem #(
     // Port A: arbitration
     // Only one thread can access memory per cycle, so pick exactly
     // one requester ("granted_lane") out of however many have mem_read or mem_write at once.
-    // Fixed priority for now (lowest index always wins ties) — fine
-    // given a short kernel and roughly-synced threads. Revisit with
-    // round-robin only if a thread is observed stalling badly.
+    //
+    // mem_read/mem_write are LEVEL signals -- cpu.sv holds them high for
+    // as long as `state` doesn't change, not a one-shot pulse per request.
+    // If we always picked the lowest requesting index with no memory of
+    // past grants, that lowest lane would win *every* cycle forever and
+    // every other lane would starve -- fatal now that the scheduler can
+    // stall for many cycles waiting on all 32 lanes to be serviced. So:
+    // track "granted_this_round" per lane, exclude already-granted lanes
+    // from re-winning, and auto-reset the exclusion set once every
+    // currently-requesting lane has had its turn (or nobody's requesting
+    // at all) so the next round starts fresh.
     // ============================================================
     logic [$clog2(N_THREADS)-1:0] granted_lane;
     logic                          grant_valid; //is there at least one lane requesting meory right now?
+
+    logic [N_THREADS-1:0] requesting;
+    always_comb
+        for (int i = 0; i < N_THREADS; i++)
+            requesting[i] = mem_read[i] | mem_write[i];
+
+    // Think of granted_this_round as a teacher's checklist: "who have I
+    // already called on this round." It only makes sense while that round
+    // is still in progress -- once every raised hand has been checked off
+    // (or nobody's raising a hand at all), the round is over and the
+    // checklist needs to be wiped blank so the *next* batch of requests
+    // (e.g. the next instruction's lanes all raising their hands again)
+    // isn't wrongly excluded by stale entries from a round that already
+    // finished.
+    logic [N_THREADS-1:0] granted_this_round;  // persistent checklist: who's already been called on this round
+    logic [N_THREADS-1:0] effective_mask;      // prevents the lag that occurs. granted_this_round won't register that round is over until after cycle N's clock edge
+
+    // requesting & ~granted_this_round = "hands raised that AREN'T on the
+    // checklist yet." Nonzero means the round is still in progress (someone
+    // is still waiting their turn), so keep using the checklist as-is. Zero
+    // means the round just finished (or never started) -- wipe it blank so
+    // this cycle's requesters are all treated as fresh.
+    assign effective_mask = (|(requesting & ~granted_this_round)) ? granted_this_round : '0;
 
     always_comb begin
         granted_lane = '0;
         grant_valid  = 1'b0;
         for (int i = 0; i < N_THREADS; i++) begin
-            if ((mem_read[i] | mem_write[i]) & ~grant_valid) begin
+            // lane requesting, it's not already checked off, and no other lane is already occupying the memory
+            if (requesting[i] & ~effective_mask[i] & ~grant_valid) begin
                 granted_lane = i[$clog2(N_THREADS)-1:0];
                 grant_valid  = 1'b1;
             end
@@ -86,6 +118,7 @@ module shared_mem #(
     always_ff @(posedge clk) begin
         if (rst) begin
             for (int i = 0; i < N_THREADS; i++) mem_valid[i] <= 1'b0;
+            granted_this_round <= '0;
         end else begin
             for (int i = 0; i < N_THREADS; i++) mem_valid[i] <= 1'b0;  // default low each cycle
 
@@ -107,6 +140,11 @@ module shared_mem #(
                 mem_rdata[granted_lane] <= mem[word_idx];
                 mem_valid[granted_lane] <= 1'b1;
             end
+
+            // update the "sign-up sheet" for next cycle: whoever just got
+            // granted this cycle gets added to it.
+            // | updates granted_this_round by | bit by bit with effective_mask
+            granted_this_round <= grant_valid ? (effective_mask | (1 << granted_lane)) : effective_mask;
         end
     end
 
