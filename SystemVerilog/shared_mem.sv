@@ -152,9 +152,27 @@ module shared_mem #(
     // Port B: dedicated display read.
     // Always active, no req/valid handshake needed — it's the only
     // user of this port, so there's nothing to arbitrate.
+    //
+    // Pixels are 3 tightly-packed bytes, so disp_addr rarely lands on a
+    // word boundary -- like reaching into cubbies that hold 4 items each
+    // for 3 items in a row: if they straddle two cubbies, one grab isn't
+    // enough. So grab both the addressed word and the next one, then
+    // slice out whichever 3 bytes actually start at disp_addr. Registered
+    // the same as before so display_controller.sv still sees 1-cycle latency.
+    //
+    // NOTE: if disp_addr's 3 bytes ever needed a word past the end of
+    // `mem`, this would index out of bounds -- safe for the current 64x64
+    // image size, would need a guard if that ever changes.
     // ============================================================
+    logic [31:0] disp_word_lo, disp_word_hi;
+    assign disp_word_lo = mem[disp_addr[15:2]];
+    assign disp_word_hi = mem[disp_addr[15:2] + 1'b1];
+
+    logic [63:0] disp_pair;
+    assign disp_pair = {disp_word_hi, disp_word_lo};
+
     always_ff @(posedge clk) begin
-        disp_rdata <= mem[disp_addr[15:2]];
+        disp_rdata <= {8'd0, disp_pair[(disp_addr[1:0] * 8) +: 24]};
     end
 
     // ============================================================
