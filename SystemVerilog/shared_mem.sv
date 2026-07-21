@@ -203,8 +203,13 @@ module shared_mem #(
     end
     // synthesis translate_on
 
-    // TODO: confirm PROG_SIZE in gpu_pkg.sv is larger than the actual compiled
-    // kernel binary once it exists — nothing here checks for overflow into IMG_BASE.
+    // TODO: $readmemb can't actually overflow past PROG_SIZE into IMG_BASE
+    // (it's bounded to that index range) -- but if the compiled program is
+    // ever bigger than PROG_SIZE, it silently truncates instead of erroring.
+    // Once a real compiler exists, add a loud check (e.g. compare $fread
+    // byte count, or a word-count check) so a too-big program errors
+    // instead of quietly losing instructions.
+    // NEED REAL COMPILER THAT PRODUCES COMPILED PROGRAM IN BINARY B4 CHECK SIZE AGAINST PROG_SIZE
 
     // TODO: this file assumes N_THREADS pixels total (one thread = one pixel,
     // no block looping yet) — revisit once block id comes back.

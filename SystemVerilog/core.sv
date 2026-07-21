@@ -83,9 +83,9 @@ module core (
     // ------------------------------------------------------------------
     // 4. cpu - register file + ALU + load/store, also drives mem_addr.
     //    32 lanes, one per thread. clk/rst/state/pc/opcode/rd/rs1/rs2/
-    //    funct3/funct7/imm are the *same* wire fanned out to all 32 (SIMD
-    //    lockstep -- matched by .* below). (thread_id)/mem_addr/mem_rdata/
-    //    rs1_val/rs2_val differ per lane, so those are connected
+    //    funct3/funct7/imm/block_id are the *same* wire fanned out to all
+    //    32 (SIMD lockstep -- matched by .* below). lane_id/mem_addr/
+    //    mem_rdata/rs1_val/rs2_val differ per lane, so those are connected
     //    explicitly to array element [i], overriding the .* match for
     //    just those ports.
     // ------------------------------------------------------------------
@@ -93,6 +93,8 @@ module core (
     input logic clk, rst,
     input logic block_start,
     input state_t state,
+    input logic [gpu_pkg::BLOCK_ID_WIDTH-1:0] block_id,
+    input logic [4:0] lane_id,
     input logic [6:0] opcode,
     input logic [4:0] rd, rs1, rs2,
     input logic [2:0] funct3,
@@ -101,7 +103,7 @@ module core (
     input logic [31:0] pc,
     input  logic [31:0] mem_rdata, - from memory
     output logic [31:0] mem_addr,
-    output logic [31:0] rs1_val, rs2_val, 
+    output logic [31:0] rs1_val, rs2_val,
     output logic mem_read,
     output logic mem_write,
     output logic [31:0] mem_wdata,
@@ -114,7 +116,7 @@ module core (
         for (i = 0; i < 32; i++) begin : lane
             cpu u_cpu (
                 .*,
-                // .thread_id(i[4:0]), // from this generation statement
+                .lane_id(i[4:0]), // from this generation statement -- pre-loaded into x30 on reset/block_start
                 .mem_rdata(mem_rdata[i]), // from memory
                 .mem_addr(mem_addr[i]), // output
                 .rs1_val(rs1_val[i]),
