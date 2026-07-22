@@ -1,7 +1,4 @@
 /**
-also copied from lab3 lol
-
-TODO: delete i2c_reveiver and assember - put equivelant logic into core.sv later
 
 **/
 

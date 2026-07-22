@@ -41,7 +41,8 @@ module scheduler #(
     output logic [31:0] thread_base, // lane i's thread_id = thread_base + i
     // TODO: clarify lane / thread id?
 
-    output logic [LANES-1:0] active_mask; // TODO: pass in active_mask[i] as an anable signal for ith cpu
+    output logic             start_new_block, // todo: let the cpu clear the sticky done - scheduler cant assign it as an input
+    output logic [LANES-1:0] active_mask, // TODO: pass in active_mask[i] as an anable signal for ith cpu
     
     // to fetcher
     output state_t state,
@@ -104,21 +105,43 @@ module scheduler #(
     logic                  block_done;  // every lane in this block has finished
     logic                  last_block;
 
+    logic [LANES-1:0]      block_lane_mask; // last block = thread % block - may not be full block
+    logic [LANES-1:0]      next_block_lane_mask;
+    // todo: next block lane mask? 
+
     assign last_block  = (block_id == N_BLOCKS-1);
-    assign kernel_done = block_done && last_block;
+    assign kernel_done = block_done & last_block;
     assign thread_base = block_id * LANES;
 
-    always_comb begin
-        block_done = 1'b1;
-        for (int i = 0; i < LANES; i++) block_done &= done[i]; // block done when every lane is done
-    end
+    assign start_new_block = state == S_WRITEBACK && block_done && !last_block;
 
+    always_comb begin
+    block_done          = 1'b1;
+    block_lane_mask     = '0;
+    next_block_lane_mask = '0;
+
+    for (int i = 0; i < LANES; i++) begin
+        // valid lanes in current block
+        if ((thread_base + i) < TOTAL_THREADS)
+            block_lane_mask[i] = 1'b1;
+
+        // valid unfinished lane - the block is not done
+        if (block_lane_mask[i] && !done[i])
+            block_done = 1'b0;
+
+        // valid lanes in the next block
+        if ((((block_id + 1'b1) * LANES) + i) < TOTAL_THREADS)
+            next_block_lane_mask[i] = 1'b1;
+    end
+end
+
+    // block id
     always_ff @(posedge clk) begin
         if (rst) begin
             block_id <= '0;
-        end else if (state == S_WRITEBACK && block_done && !last_block) begin
+        end 
+        else if (state == S_WRITEBACK && block_done && !last_block) begin
             block_id <= block_id + 1'b1;
-            for (int 1 = 0; i < LANES; i++) done[i] <= 1'b0; // todo: check if it's valid for resetting done
         end
     end
 
@@ -133,79 +156,109 @@ module scheduler #(
     // assume only 2 branches: primary / branch
     // if more branches exist then do a stack_ptr logic
 
-    logic [31:0] primary_pc,
-    logic [31:0] branch_pc,
+    logic [31:0] primary_pc;
+    logic [31:0] branch_pc;
 
-    logic [LANES-1:0] primary_mask,
-    logic [LANES-1:0] branch_mask,
+    logic [LANES-1:0] primary_mask;
+    logic [LANES-1:0] branch_mask;
 
-    logic primary_valid,
-    logic branch_valid,
+    logic primary_valid;
+    logic branch_valid;
     logic divergence_detected;
-
-    always_comb begin
-        primary_pc <= '0;
-        branch_pc  <= '0;
-
-        primary_mask <= '0;
-        branch_mask  <= '0;
-
-        primary_valid <= 0;
-        branch_valid  <= 0;
-
-        for (int i = 0; i < LANES; i++) begin
-            if (active_mask[i] & !done[i]) begin
-                if (!primary_valid) begin 
-                    // if primary_pc not set then set it as the first pc seen
-                    primary_pc <= next_pc[i];
-                    primary_mask[i] <= 1'b1;
-                    primary_valid <= 1'b1;
-                end
-                else if (primary_pc == next_pc[i]) begin
-                    primary_mask[i] <= 1'b1; // flip corresponding bit on mask
-                end
-                else if (!branch_valid & !done[i]) begin
-                    // a different pc than primary_pc first seen, set as branch
-                    branch_pc <= next_pc[i];
-                    branch_mask[i] <= 1'b1;
-                    branch_valid <= 1'b1;
-                end
-                else if (branch_pc == next_pc[i]) begin
-                    branch_mask[i] <= 1'b1;
-                end
-            end
-        end  
-        divergence_detected = primary_valid & branch_valid;
-    
-    end
 
     logic [31:0] saved_pc;
     logic [LANES-1:0] saved_mask;
+    logic saved_path_valid;
 
+    logic all_active_done; // all lanes under active_mask done / current branch done
+    // todo: what if a branch diverge again
+
+
+    always_comb begin
+        primary_pc = '0;
+        branch_pc  = '0;
+
+        primary_mask = '0;
+        branch_mask  = '0;
+
+        primary_valid = 1'b0;
+        branch_valid  = 1'b0;
+
+        all_active_done = 1'b1;
+
+        for (int i = 0; i < LANES; i++) begin
+            if (active_mask[i] & !done[i]) begin
+                all_active_done = 1'b0;
+
+                if (!primary_valid) begin 
+                    // if primary_pc not set then set it as the first pc seen
+                    primary_pc = next_pc[i];
+                    primary_mask[i] = 1'b1;
+                    primary_valid = 1'b1;
+                end
+                else if (primary_pc == next_pc[i]) begin
+                    primary_mask[i] = 1'b1; // flip corresponding bit on mask
+                end
+                else if (!branch_valid) begin
+                    // a different pc than primary_pc first seen, set as branch
+                    branch_pc = next_pc[i];
+                    branch_mask[i] = 1'b1;
+                    branch_valid = 1'b1;
+                end
+                else if (branch_pc == next_pc[i]) begin
+                    branch_mask[i] = 1'b1;
+                end
+            end
+        end  
+
+        divergence_detected = primary_valid & branch_valid;
+    end
+    
+    // current pc
+    // active mask
+    // saved pc / mask / valid
     always_ff @(posedge clk) begin
         if (rst) begin
             current_pc <= '0;
-            active_mask <= '1
+            active_mask <= block_lane_mask; // todo: double check - add a condition of if #threads > #lanes?
+
+            saved_pc <= '0;
+            saved_mask <= '0;
+            saved_path_valid <= 1'b0;
+
         end 
         else if (state == S_WRITEBACK && block_done && !last_block) begin
             current_pc <= '0; // next block re-runs the kernel from the top
-            active_mask <= '1;
+            active_mask <= next_block_lane_mask;
+
+            saved_pc <= '0;
+            saved_mask <= '0;
+            saved_path_valid <= 1'b0;
         end 
-        else if (state == S_WRITEBACK) begin
-            if (divergent_detected) begin
+        else if (state == S_WRITEBACK) begin // within a block
+            if (all_active_done) begin
+                if (saved_path_valid) begin
+                    // current path finished - run deferred path
+                    current_pc <= saved_pc;
+                    active_mask <= saved_mask;
+                    saved_path_valid <= 1'b0;
+                end
+                else begin
+                    active_mask <= '0;
+                end
+            end
+
+            else if (divergence_detected) begin
                 current_pc <= primary_pc;
                 active_mask <= primary_mask;
 
                 // save branch pc and mask to be executed later
                 saved_pc <= branch_pc;
                 saved_mask <= branch_mask;
-
-                // todo: 2 possibilities:
-                // (1) active lanes reached the end of the kernel
-                // (2) active lanes reached the point where the two branch paths rejoin - need to know addr of reconvergence
+                saved_path_valid <= 1'b1;
             
             end
-            else if (primary_valid) begin
+            else if (primary_valid) begin // normal execution
                 current_pc <= primary_pc;
                 active_mask <= primary_mask;
             end
