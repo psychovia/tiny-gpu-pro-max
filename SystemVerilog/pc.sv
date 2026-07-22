@@ -7,7 +7,6 @@ import gpu_pkg::*;
 module pc (
     input state_t state,
     input logic rst, clk,
-    input logic block_start,   // pulses when advancing to the next block; resets pc like rst does
     input logic [6:0] opcode,
     input logic [2:0] funct3, 
     input logic [31:0] rs1_val, rs2_val,
@@ -21,7 +20,7 @@ module pc (
     assign is_S_EXECUTE = (state == S_EXECUTE);
 
     always_ff @(posedge clk) begin
-        if (rst | block_start) begin
+        if (rst) begin
             pc <= 32'd0;
         end
         else if (is_S_WRITEBACK) begin

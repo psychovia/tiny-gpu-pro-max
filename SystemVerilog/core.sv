@@ -20,9 +20,7 @@ module core (
     output logic        mem_write [0:31], // per lane -- asserted on the one cycle a store commits
     output logic [31:0] mem_wdata [0:31], // per lane -- store data, shifted into byte position
     output logic [3:0]  byte_en   [0:31], // per lane -- which byte lane(s) of mem_wdata are valid
-    output logic        block_done,       // high once every lane in the current block has signaled done
-    output logic        kernel_done,      // high once every block has been dispatched and completed
-    output logic [gpu_pkg::BLOCK_ID_WIDTH-1:0] block_id  // which block is currently assigned to this core
+    output logic        kernel_done       // high once every lane has signaled done -- see scheduler.sv's NOTE on block dispatch being removed
 );
 
     // ------------------------------------------------------------------
@@ -43,8 +41,7 @@ module core (
                                                     // ONE lane's copy (the leader lane) to resolve
                                                     // branches -- picking which lane and wiring it
                                                     // into pc.sv is step #3, not done yet.
-    logic        done [0:31];                     // per-lane done, feeds scheduler's block_done reduction
-    logic        block_start;                     // pulses when advancing to the next block; resets pc/regs/done like rst does, without touching block_id
+    logic        done [0:31];                     // per-lane done, feeds scheduler's kernel_done reduction
     logic        stall;                           // scheduler.sv now drives this (freezes `state` until every lane it's waiting on has mem_valid) -- not yet consumed by pc.sv/cpu.sv themselves, since they still latch off `state` directly. Fine for now: freezing `state` already keeps them from advancing past a phase early.
 
     // ------------------------------------------------------------------
@@ -83,7 +80,7 @@ module core (
     // ------------------------------------------------------------------
     // 4. cpu - register file + ALU + load/store, also drives mem_addr.
     //    32 lanes, one per thread. clk/rst/state/pc/opcode/rd/rs1/rs2/
-    //    funct3/funct7/imm/block_id are the *same* wire fanned out to all
+    //    funct3/funct7/imm are the *same* wire fanned out to all
     //    32 (SIMD lockstep -- matched by .* below). lane_id/mem_addr/
     //    mem_rdata/rs1_val/rs2_val differ per lane, so those are connected
     //    explicitly to array element [i], overriding the .* match for
@@ -91,9 +88,7 @@ module core (
     // ------------------------------------------------------------------
     /**
     input logic clk, rst,
-    input logic block_start,
     input state_t state,
-    input logic [gpu_pkg::BLOCK_ID_WIDTH-1:0] block_id,
     input logic [4:0] lane_id,
     input logic [6:0] opcode,
     input logic [4:0] rd, rs1, rs2,
@@ -116,7 +111,7 @@ module core (
         for (i = 0; i < 32; i++) begin : lane
             cpu u_cpu (
                 .*,
-                .lane_id(i[4:0]), // from this generation statement -- pre-loaded into x30 on reset/block_start
+                .lane_id(i[4:0]), // from this generation statement -- pre-loaded into x30 on reset
                 .mem_rdata(mem_rdata[i]), // from memory
                 .mem_addr(mem_addr[i]), // output
                 .rs1_val(rs1_val[i]),
@@ -145,7 +140,6 @@ module core (
     /**
     input state_t state,
     input logic rst, clk,
-    input logic block_start, 
     input logic [6:0] opcode,
     input logic [2:0] funct3, 
     input logic [31:0] rs1_val, rs2_val,

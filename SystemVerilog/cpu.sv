@@ -4,9 +4,7 @@ import gpu_pkg::*;
 
 module cpu (
     input logic clk, rst,
-    input logic block_start,   // pulses when advancing to the next block; resets regs/done like rst does
     input state_t state,       // shared phase, driven by scheduler.sv
-    input logic [gpu_pkg::BLOCK_ID_WIDTH-1:0] block_id, // which block this core is currently dispatching -- same value fanned out to all 32 lanes
     input logic [4:0] lane_id, // which of the 32 lanes this cpu instance is (core.sv's generate index) -- differs per lane
     input logic [6:0] opcode,
     input logic [4:0] rd, rs1, rs2,
@@ -169,19 +167,18 @@ module cpu (
         end
     end
 
-    // reset registers -- also on block_start, so the next block starts
-    // from a clean register file instead of inheriting the previous
-    // block's values. x29/x30 are the exception: instead of zeroing them
-    // like everything else, pre-load them with this lane's identity
-    // (block_id, lane_id) so a program can compute which pixel it owns
-    // (e.g. pixel_idx = x29 * N_THREADS + x30) just by reading a register
-    // -- no new instruction needed. Reserved by convention only (like
-    // x31 for "done"), not hardware-enforced -- a program could still
-    // clobber them if it used x29/x30 as scratch.
+    // reset registers. x30 is the exception: instead of zeroing it like
+    // everything else, pre-load it with this lane's identity (lane_id) so
+    // a program can compute which pixel it owns just by reading a
+    // register -- no new instruction needed. Reserved by convention only
+    // (like x31 for "done"), not hardware-enforced -- a program could
+    // still clobber it if it used x30 as scratch.
+    // x29 used to hold block_id (see block_logic.sv) back when this core
+    // cycled through multiple blocks of threads; now lane_id alone is the
+    // thread id, so x29 is just a normal zeroed register.
     always_ff @(posedge clk) begin
-        if (rst | block_start) begin
+        if (rst) begin
             for (int i = 0; i < 32; i++) regs[i] <= 32'd0;
-            regs[29] <= {{(32-gpu_pkg::BLOCK_ID_WIDTH){1'b0}}, block_id};
             regs[30] <= {27'd0, lane_id};
         end
     end
@@ -197,10 +194,9 @@ module cpu (
     end
 
     // done -- sticky, set once this lane writes 1 to x31 via an ALU
-    // op, never cleared except on reset or block_start (next block needs
-    // to run from a fresh, un-done state).
+    // op, never cleared except on reset.
     always_ff @(posedge clk) begin
-        if (rst | block_start) begin
+        if (rst) begin
             done <= 1'b0;
         end
         else if (is_ALU_RESULT & rd == 5'd31 & alu_result == 32'd1) begin
