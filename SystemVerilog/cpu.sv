@@ -4,8 +4,10 @@ import gpu_pkg::*;
 
 module cpu (
     input logic clk, rst,
+    input logic block_start,   // pulses when advancing to the next block; resets regs/done like rst does
     input state_t state,       // shared phase, driven by scheduler.sv
-    input logic [4:0] thread_id,
+    input logic [gpu_pkg::BLOCK_ID_WIDTH-1:0] block_id, // which block this core is currently dispatching -- same value fanned out to all 32 lanes
+    input logic [4:0] lane_id, // which of the 32 lanes this cpu instance is (core.sv's generate index) -- differs per lane
     input logic [6:0] opcode,
     input logic [4:0] rd, rs1, rs2,
     input logic [2:0] funct3,
@@ -37,7 +39,6 @@ module cpu (
     logic [31:0] alu_result;
 
 
-
     // ------------------------------------------------------------------
     // Memory port
     // ------------------------------------------------------------------
@@ -45,6 +46,18 @@ module cpu (
     logic [31:0] load_result;
 
     assign mem_addr = (state == S_MEM_ADDR || state == S_MEM_WAIT) ? ea : pc;
+
+    // MMIO_BASE (gpu_pkg.sv) reserves a slice of the address space for
+    // future device registers rather than real memory -- nothing generates
+    // an MMIO address today (no compiler/program targets it yet), but if a
+    // load/store's `ea` ever landed there, it must NOT be allowed to fall
+    // through to shared_mem.sv, since word_idx only looks at the low bits
+    // of the address and would silently alias into real program/image
+    // memory. This is a defensive stub only: it makes MMIO accesses inert
+    // (loads read 0, stores are dropped) rather than defining real device
+    // behavior, which depends on hardware/toolchain decisions not made yet.
+    logic is_mmio;
+    assign is_mmio = (ea[31:16] == MMIO_BASE[31:16]);
 
     // ea[1:0] gives the byte offset within the 32-bit word (0-3).
     // Multiplying by 8 converts byte offset to bit offset so we can
@@ -57,14 +70,18 @@ module cpu (
     // loading out of the memory
     always_ff @(posedge clk) begin
         if (state == S_MEM_WAIT) begin
-            case(funct3)
-                3'b000: load_result <= {{24{mem_rdata[byte_shift+7]}}, mem_rdata[byte_shift +: 8]}; //lb sign extended
-                3'b001: load_result <= {{16{mem_rdata[byte_shift+15]}}, mem_rdata[byte_shift +: 16]}; //lh sign extended
-                3'b010: load_result <= mem_rdata; //lw
-                3'b100: load_result <= {24'd0, mem_rdata[byte_shift +: 8]}; //lbu zero-extended
-                3'b101: load_result <= {16'd0, mem_rdata[byte_shift +: 16]};//lhu zero extended
-                default: load_result <= 32'd0;
-            endcase
+            if (is_mmio) begin
+                load_result <= 32'd0; // no real device behind MMIO_BASE yet -- reads as 0
+            end else begin
+                case(funct3)
+                    3'b000: load_result <= {{24{mem_rdata[byte_shift+7]}}, mem_rdata[byte_shift +: 8]}; //lb sign extended
+                    3'b001: load_result <= {{16{mem_rdata[byte_shift+15]}}, mem_rdata[byte_shift +: 16]}; //lh sign extended
+                    3'b010: load_result <= mem_rdata; //lw
+                    3'b100: load_result <= {24'd0, mem_rdata[byte_shift +: 8]}; //lbu zero-extended
+                    3'b101: load_result <= {16'd0, mem_rdata[byte_shift +: 16]};//lhu zero extended
+                    default: load_result <= 32'd0;
+                endcase
+            end
         end
     end
 
@@ -83,19 +100,35 @@ module cpu (
 
 
     assign mem_write = (state == S_MEM_ADDR & opcode == 7'b0100011); // s-type
+    // Only assert mem_read when something actually needs the result:
+    // fetching the instruction (S_FETCH/S_FETCH_WAIT) or a load's data
+    // (S_MEM_ADDR/S_MEM_WAIT). Not S_EXECUTE/S_WRITEBACK -- instr was
+    // already latched, so reading again there was just wasted bandwidth.
     assign mem_read = (state == S_FETCH) | (state == S_FETCH_WAIT) |
-                       (state == S_EXECUTE) | (state == S_WRITEBACK) |
-                       ((state == S_MEM_ADDR | state == S_MEM_WAIT) & opcode == 7'b0000011);
+                       ((state == S_MEM_ADDR | state == S_MEM_WAIT) & opcode == 7'b0000011); // l-type loading from memory to register
+    // NOTE: mem_read/mem_write deliberately stay ungated by is_mmio -- an
+    // MMIO-targeted lane still needs to be granted+serviced normally so
+    // scheduler.sv's stall bookkeeping (which waits for every lane's
+    // mem_valid during S_MEM_ADDR) doesn't hang waiting on a lane that
+    // would otherwise never request anything. MMIO safety is enforced
+    // below instead, by neutralizing byte_en (no real bytes ever get
+    // written) and by the load_result override above (reads as 0).
 
-    // byte enable to flag which bytes we are writing over
+    // A word is 4 mail slots in a row; a store only wants to drop a letter
+    // into 1 (sb) or 2 (sh) of them. ea[1:0] says which slot to start at,
+    // so we slide the "letters here" mask over by that many slots.
     logic [3:0] byte_en_comb;
     always_comb begin
-        case (funct3)
-            3'b000:  byte_en_comb = 4'b0001 << ea[1:0]; // sb
-            3'b001:  byte_en_comb = 4'b0011 << ea[1:0]; // sh
-            3'b010:  byte_en_comb = 4'b1111;            // sw
-            default: byte_en_comb = 4'b0000;
-        endcase
+        if (is_mmio) begin
+            byte_en_comb = 4'b0000; // no real device yet -- never actually commit bytes to shared_mem for an MMIO store, no matter what address it aliases to
+        end else begin
+            case (funct3)
+                3'b000:  byte_en_comb = 4'b0001 << ea[1:0]; // one hot encoding so 0001 refers to one byte that should be replaced and then ea[1:0] shifts the to which byte supposed to store - sb
+                3'b001:  byte_en_comb = 4'b0011 << ea[1:0]; // sh
+                3'b010:  byte_en_comb = 4'b1111;            // sw
+                default: byte_en_comb = 4'b0000;
+            endcase
+        end
     end
     assign byte_en = byte_en_comb;
 
@@ -105,7 +138,7 @@ module cpu (
     logic [31:0] mem_wdata_comb;
     always_comb begin
         case (funct3)
-            3'b000:  mem_wdata_comb = {24'd0, rs2_val[7:0]}  << byte_shift; // sb
+            3'b000:  mem_wdata_comb = {24'd0, rs2_val[7:0]}  << byte_shift; // sb - like {24'd0, rs2_val[7:0]} is the what is getting written and then byte_shift shifts into correct position
             3'b001:  mem_wdata_comb = {16'd0, rs2_val[15:0]} << byte_shift; // sh
             3'b010:  mem_wdata_comb = rs2_val;                              // sw
             default: mem_wdata_comb = 32'd0;
@@ -136,10 +169,20 @@ module cpu (
         end
     end
 
-    // reset registers
+    // reset registers -- also on block_start, so the next block starts
+    // from a clean register file instead of inheriting the previous
+    // block's values. x29/x30 are the exception: instead of zeroing them
+    // like everything else, pre-load them with this lane's identity
+    // (block_id, lane_id) so a program can compute which pixel it owns
+    // (e.g. pixel_idx = x29 * N_THREADS + x30) just by reading a register
+    // -- no new instruction needed. Reserved by convention only (like
+    // x31 for "done"), not hardware-enforced -- a program could still
+    // clobber them if it used x29/x30 as scratch.
     always_ff @(posedge clk) begin
-        if (rst) begin
+        if (rst | block_start) begin
             for (int i = 0; i < 32; i++) regs[i] <= 32'd0;
+            regs[29] <= {{(32-gpu_pkg::BLOCK_ID_WIDTH){1'b0}}, block_id};
+            regs[30] <= {27'd0, lane_id};
         end
     end
 
@@ -154,12 +197,13 @@ module cpu (
     end
 
     // done -- sticky, set once this lane writes 1 to x31 via an ALU
-    // op, never cleared except on reset.
+    // op, never cleared except on reset or block_start (next block needs
+    // to run from a fresh, un-done state).
     always_ff @(posedge clk) begin
-        if (rst) begin
+        if (rst | block_start) begin
             done <= 1'b0;
         end
-        else if (is_ALU_RESULT && rd == 5'd31 && alu_result == 32'd1) begin
+        else if (is_ALU_RESULT & rd == 5'd31 & alu_result == 32'd1) begin
             done <= 1'b1;
         end
     end
