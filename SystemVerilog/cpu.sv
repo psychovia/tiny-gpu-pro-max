@@ -24,6 +24,8 @@ module cpu (
     // x0, 1`. Sticky -- once set, stays set until reset, regardless of
     // what happens to x31 afterward.
     output logic done
+
+    input logic active, // connected with active[i] when instantiating
 );
 
     // ------------------------------------------------------------------
@@ -36,6 +38,7 @@ module cpu (
 
     logic [31:0] alu_result;
 
+ 
 
     // ------------------------------------------------------------------
     // Memory port
@@ -67,7 +70,7 @@ module cpu (
 
     // loading out of the memory
     always_ff @(posedge clk) begin
-        if (state == S_MEM_WAIT) begin
+        if (active & state == S_MEM_WAIT) begin
             if (is_mmio) begin
                 load_result <= 32'd0; // no real device behind MMIO_BASE yet -- reads as 0
             end else begin
@@ -85,15 +88,17 @@ module cpu (
 
     // which address to take from in memory
     always_ff @(posedge clk) begin
-        case(state)
-            S_EXECUTE:
-                case(opcode)
-                    // loads (I-type) and stores (S-type)
-                    7'b0000011, 7'b0100011: ea <= rs1_val + imm;
-                    default: ea <= ea;
-                endcase
-            default: ea <= ea;
-        endcase
+        if (active) begin
+            case(state)
+                S_EXECUTE:
+                    case(opcode)
+                        // loads (I-type) and stores (S-type)
+                        7'b0000011, 7'b0100011: ea <= rs1_val + imm;
+                        default: ea <= ea;
+                    endcase
+                default: ea <= ea;
+            endcase
+        end
     end
 
 
@@ -103,7 +108,7 @@ module cpu (
     // (S_MEM_ADDR/S_MEM_WAIT). Not S_EXECUTE/S_WRITEBACK -- instr was
     // already latched, so reading again there was just wasted bandwidth.
     assign mem_read = (state == S_FETCH) | (state == S_FETCH_WAIT) |
-                       ((state == S_MEM_ADDR | state == S_MEM_WAIT) & opcode == 7'b0000011); // l-type loading from memory to register
+                       (active & (state == S_MEM_ADDR | state == S_MEM_WAIT) & opcode == 7'b0000011); // l-type loading from memory to register
     // NOTE: mem_read/mem_write deliberately stay ungated by is_mmio -- an
     // MMIO-targeted lane still needs to be granted+serviced normally so
     // scheduler.sv's stall bookkeeping (which waits for every lane's
@@ -153,10 +158,10 @@ module cpu (
 
     assign rs1_val = (rs1 == 5'd0) ? 32'd0 : regs[rs1];
     assign rs2_val = (rs2 == 5'd0) ? 32'd0 : regs[rs2];
-    assign is_S_EXECUTE = (state == S_EXECUTE);
+    assign is_S_EXECUTE = active & (state == S_EXECUTE);
     assign is_S_WRITEBACK = (state == S_WRITEBACK);
-    assign is_LOAD_RESULT = (state == S_WRITEBACK & rd != 5'd0 & opcode != 7'b1100011 & opcode != 7'b0100011 & opcode == 7'b0000011);
-    assign is_ALU_RESULT = (state == S_WRITEBACK & rd != 5'd0 & opcode != 7'b1100011 & opcode != 7'b0100011);
+    assign is_LOAD_RESULT = active & (state == S_WRITEBACK & rd != 5'd0 & opcode != 7'b1100011 & opcode != 7'b0100011 & opcode == 7'b0000011);
+    assign is_ALU_RESULT = active & (state == S_WRITEBACK & rd != 5'd0 & opcode != 7'b1100011 & opcode != 7'b0100011);
 
     always_ff @(posedge clk) begin
         if (is_S_EXECUTE) begin
