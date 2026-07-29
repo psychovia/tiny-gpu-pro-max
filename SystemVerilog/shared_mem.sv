@@ -23,7 +23,8 @@ import gpu_pkg::*;
 module shared_mem #(
     parameter int    N_THREADS      = gpu_pkg::N_THREADS,
     parameter int    MEM_SIZE_BYTES = gpu_pkg::MEM_SIZE_BYTES,
-    parameter string INIT_FILE      = "mems/kernel.mem"
+    parameter string PROG_INIT_FILE = "mems/prog.mem",
+    parameter string IMG_INIT_FILE  = "mems/img.mem"
 ) (
     input  logic         clk, rst,
     input  logic [31:0]  mem_addr  [0:N_THREADS-1], // per-lane address -- named to match core.sv/cpu.sv's mem_addr (was "addr", which .*-instantiation in gpu.sv silently failed to connect since names didn't match)
@@ -47,10 +48,22 @@ module shared_mem #(
     logic [31:0] mem [0:WORDS-1];
 
     initial begin
+        // Zero the whole array BEFORE the file loads. $readmemb only writes
+        // as many words as the file actually contains, not the full range it
+        // is given: prog.mem holds a single instruction but the call below
+        // covers PROG_SIZE/4 = 1024 words, so words 1..1023 were left
+        // uninitialized (X in simulation -- the red traces in the waveform).
+        // That X is also a sim/hardware divergence: on the FPGA this memory
+        // powers up to whatever the bitstream loads, real 0s and 1s, so a
+        // program running off its end would behave differently on the board
+        // than it does here. Zeroing first makes both match and stays correct
+        // however large the program file grows.
+        for (int i = 0; i < WORDS; i++) mem[i] = '0;
+
         // loaded as two separate files so program/image can't drift out of sync
         // by hand-merging offsets — see PROG_BASE/IMG_BASE in gpu_pkg.sv
         $readmemb(PROG_INIT_FILE, mem, PROG_BASE/4, PROG_BASE/4 + PROG_SIZE/4 - 1);
-        $readmemb(IMG_INIT_FILE,  mem, IMG_BASE/4,  IMG_BASE/4  + IMG_SIZE_BYTES/4 - 1);
+        $readmemb(IMG_INIT_FILE, mem, IMG_BASE/4, IMG_BASE/4 + IMG_SIZE_BYTES/4 - 1);
     end
 
     // ============================================================
@@ -113,7 +126,18 @@ module shared_mem #(
     // this cycle, data out next cycle — same behavior cpu.sv's
     // original private `mem` array already had).
     // ============================================================
-    logic [13:0] word_idx;
+    // Word index width comes from WORDS, not a hardcoded 14. mem_addr[15:2] is
+    // 14 bits wide but `mem` only has WORDS = MEM_SIZE_BYTES/4 = 4096 entries,
+    // so a 14-bit index could name words 4096..16383 that do not exist -- an
+    // out-of-range write (silently dropped in simulation) and an out-of-range
+    // read (X in simulation) that on the FPGA would instead alias back into
+    // real memory. Truncating to WIDX_BITS makes both behave the same way,
+    // which is the same sim/hardware-parity argument as the pre-zeroing loop
+    // above. Addresses at or above WORDS*4 alias rather than vanish; nothing
+    // generates one today, and MMIO is neutralized separately in cpu.sv.
+    localparam int WIDX_BITS = $clog2(WORDS);
+
+    logic [WIDX_BITS-1:0] word_idx;
 
     always_ff @(posedge clk) begin
         if (rst) begin
@@ -123,7 +147,7 @@ module shared_mem #(
             for (int i = 0; i < N_THREADS; i++) mem_valid[i] <= 1'b0;  // default low each cycle
 
             if (grant_valid) begin
-                word_idx = mem_addr[granted_lane][15:2];
+                word_idx = mem_addr[granted_lane][WIDX_BITS+1:2];
 
                 if (mem_write[granted_lane]) begin
                     // byte-masked write — same pattern as the original cpu.sv (lines 206-211)
@@ -160,13 +184,20 @@ module shared_mem #(
     // slice out whichever 3 bytes actually start at disp_addr. Registered
     // the same as before so display_controller.sv still sees 1-cycle latency.
     //
-    // NOTE: if disp_addr's 3 bytes ever needed a word past the end of
-    // `mem`, this would index out of bounds -- safe for the current 64x64
-    // image size, would need a guard if that ever changes.
+    // The +1 below is why disp_widx is truncated to WIDX_BITS rather than left
+    // 14 bits wide: the very last pixel of the image lives in the last word, so
+    // "the next word" is one past the end of `mem`. Truncating makes that read
+    // wrap to word 0 instead of going out of bounds. The wrapped value is never
+    // selected -- a 3-byte pixel starting in the last word has disp_addr[1:0]
+    // = 1, so the slice below takes bits 8..31, all of which come from
+    // disp_word_lo -- but the array read itself has to be in range regardless.
     // ============================================================
+    logic [WIDX_BITS-1:0] disp_widx;
+    assign disp_widx = disp_addr[WIDX_BITS+1:2];
+
     logic [31:0] disp_word_lo, disp_word_hi;
-    assign disp_word_lo = mem[disp_addr[15:2]];
-    assign disp_word_hi = mem[disp_addr[15:2] + 1'b1];
+    assign disp_word_lo = mem[disp_widx];
+    assign disp_word_hi = mem[WIDX_BITS'(disp_widx + 1'b1)];
 
     logic [63:0] disp_pair;
     assign disp_pair = {disp_word_hi, disp_word_lo};

@@ -1,0 +1,10 @@
+-------------------------------------
+| Tool Version : Vivado v.2025.2
+| Date         : Tue Jul 28 22:30:03 2026
+| Host         : 0m5awdtvxwbq595qv625cz735n
+| Design       : checkpoint_hdmi_test_top
+| Device       : xc7s50-csga324-1--
+-------------------------------------
+
+For more information on clockInfo.txt clock routing debug file see https://support.xilinx.com/s/article/000035660?language=en_US
+

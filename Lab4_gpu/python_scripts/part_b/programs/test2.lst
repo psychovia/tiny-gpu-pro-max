@@ -1,0 +1,14 @@
+# addr      word      source
+00000000  00010137  lui sp, 0x10   ; li
+00000004  00000893  addi a7, zero, 0   ; li
+00000008  03000413  addi s0, zero, 48   ; li
+0000000C  03A00493  addi s1, zero, 58   ; li
+00000010  00040513  addi a0, s0, 0   ; mv
+00000014  00000073  ecall
+00000018  00140413  addi s0, s0, 1
+0000001C  FE944AE3  blt s0, s1, loop
+00000020  00C000EF  jal ra, newline
+00000024  00000073  ecall
+00000028  00100073  ebreak   ; halt
+0000002C  00A00513  addi a0, zero, 10   ; li
+00000030  00008067  jalr zero, ra, 0   ; ret

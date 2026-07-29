@@ -42,16 +42,16 @@ module scheduler #(
 
     // from fetcher
     input  logic [6:0] opcode,
-
-    // from pc.sv
-    input  logic [31:0] next_pc [0:LANES-1], // 1 candidate pc fromeach lane
+    // funct3 too, because the three data-buffer instructions share one opcode:
+    // getdt/setdt need the S_MEM_ADDR phase, rdtid does not.
+    input  logic [2:0] funct3,
 
     // from/to cpu
     input  logic        done [0:LANES-1],      // sticky - stays same until rst
     input  logic        mem_valid [0:LANES-1], // per-lane "your request from shared_mem landed this cycle" -- drives stall
-    output logic [31:0] current_pc,
+    input  logic        dt_valid  [0:LANES-1], // the same, from data_buffer.sv
 
-    output logic [LANES-1:0] active_mask, // TODO: pass in active_mask[i] as an anable signal for ith cpu
+    output logic [LANES-1:0] active_mask, // enable signal for each cpu lane -- see NOTE below
     output logic             stall,
 
     // to fetcher
@@ -105,13 +105,19 @@ module scheduler #(
     // serviced accumulates mem_valid pulses across the stall and resets the
     // moment stall goes low, so a state that never actually stalls (an
     // all-0 require_mask) always starts the next state with a clean slate.
+    //
+    // "Serviced" means shared_mem OR data_buffer answered, whichever this
+    // instruction was asking. ORing them is safe rather than ambiguous: every
+    // lane runs the same instruction (SIMT lockstep, one shared FSM), so only
+    // one of the two can have anything in flight at a time -- a load never
+    // makes dt_valid fire, a getdt never makes mem_valid fire.
     logic serviced [0:LANES-1];
     always_ff @(posedge clk) begin
         if (rst || !stall) begin
             for (int i = 0; i < LANES; i++) serviced[i] <= 1'b0;
         end else begin
             for (int i = 0; i < LANES; i++)
-                if (mem_valid[i]) serviced[i] <= 1'b1;
+                if (mem_valid[i] | dt_valid[i]) serviced[i] <= 1'b1;
         end
     end
 
@@ -122,6 +128,13 @@ module scheduler #(
             stall_comb = stall_comb | (require_mask[i] & ~serviced[i]);
     end
     assign stall = stall_comb;
+
+    // Declared up here, not next to the always_comb below that drives it:
+    // the state register reads next_state, and SystemVerilog requires a
+    // declaration to precede first use. Vivado synthesis only warned about
+    // this (Synth 8-6901) so the bitstream built fine, but xvlog rejects it
+    // outright (VRFC 10-3380), which stopped the testbench compiling.
+    state_t next_state;
 
     // state register
     // freezes once kernel_done (every lane finished) or while stalled.
@@ -140,10 +153,9 @@ module scheduler #(
 
     // next state logic
 
-    // EXECUTE - each lane evaluates branch and records next_pc[i]
-    // WRITEBACK - scheduler compare next_pc[i], selects pc and mask for next fetch
-    // FETCH - fetch instr at newly selected pc
-    state_t next_state;
+    // EXECUTE - leader lane (lane 0) evaluates branch, pc.sv records next_pc
+    // WRITEBACK - pc.sv applies next_pc; every lane just followed along
+    // FETCH - fetch instr at the newly selected pc
     always_comb begin
         next_state = state;
         case (state)
@@ -159,11 +171,21 @@ module scheduler #(
                     // load / store between memory & register
                     7'b0000011, 7'b0100011:
                         next_state = S_MEM_ADDR;
+                    // getdt/setdt reach the data buffer, so they take the same
+                    // detour as a load/store. rdtid reads no memory at all --
+                    // cpu.sv computes it in the ALU -- so it goes straight to
+                    // writeback like any other arithmetic instruction.
+                    OPC_GPU:
+                        next_state = (funct3 == F3_RDTID) ? S_WRITEBACK : S_MEM_ADDR;
                     default: next_state = S_WRITEBACK;
                 endcase
             end
             S_MEM_ADDR: begin
-                next_state = (opcode == 7'b0000011) ? S_MEM_WAIT : S_WRITEBACK; // if loading then wait else writeback
+                // Only reads need the extra cycle for their data to come back;
+                // a store/setdt has already committed by the end of this state.
+                next_state = (opcode == 7'b0000011
+                              || (opcode == OPC_GPU && funct3 == F3_GETDT))
+                             ? S_MEM_WAIT : S_WRITEBACK;
             end
             S_MEM_WAIT: next_state = S_WRITEBACK;
 
@@ -175,114 +197,17 @@ module scheduler #(
 
 
     // ------------------------------------------------------------------
-    // 2. per-lane pc -- lockstep: every still-running lane advances to the
-    //    same next_pc (resolved once, off the leader lane, by pc.sv). A lane
-    //    that's already done freezes at its last value instead of following
-    //    the rest of the pack.
+    // 2. active_mask -- core.sv runs a single leader-lane pc.sv shared by
+    //    every lane (SIMD lockstep, see core.sv's note), so there's no
+    //    per-thread divergence support today: every lane is active for
+    //    the whole run. This used to carry real per-lane branch-divergence
+    //    bookkeeping (primary/branch pc splitting, a saved deferred path),
+    //    but that logic depended on a per-lane `next_pc` array that
+    //    nothing in core.sv ever produced (only lane 0 resolves branches)
+    //    -- it was dead code sitting on a floating port. Revive it here
+    //    (and give pc.sv one instance per lane) if divergent control flow
+    //    is ever actually implemented.
     // ------------------------------------------------------------------
-
-    // for branch divergence
-    // assume only 2 branches: primary / branch
-    // if more branches exist then do a stack_ptr logic
-
-    logic [31:0] primary_pc;
-    logic [31:0] branch_pc;
-
-    logic [LANES-1:0] primary_mask;
-    logic [LANES-1:0] branch_mask;
-
-    logic primary_valid;
-    logic branch_valid;
-    logic divergence_detected;
-
-    logic [31:0] saved_pc;
-    logic [LANES-1:0] saved_mask;
-    logic saved_path_valid;
-
-    logic all_active_done; // all lanes under active_mask done / current branch done
-    // todo: what if a branch diverge again
-
-
-    always_comb begin
-        primary_pc = '0;
-        branch_pc  = '0;
-
-        primary_mask = '0;
-        branch_mask  = '0;
-
-        primary_valid = 1'b0;
-        branch_valid  = 1'b0;
-
-        all_active_done = 1'b1;
-
-        for (int i = 0; i < LANES; i++) begin
-            if (active_mask[i] & !done[i]) begin
-                all_active_done = 1'b0;
-
-                if (!primary_valid) begin
-                    // if primary_pc not set then set it as the first pc seen
-                    primary_pc = next_pc[i];
-                    primary_mask[i] = 1'b1;
-                    primary_valid = 1'b1;
-                end
-                else if (primary_pc == next_pc[i]) begin
-                    primary_mask[i] = 1'b1; // flip corresponding bit on mask
-                end
-                else if (!branch_valid) begin
-                    // a different pc than primary_pc first seen, set as branch
-                    branch_pc = next_pc[i];
-                    branch_mask[i] = 1'b1;
-                    branch_valid = 1'b1;
-                end
-                else if (branch_pc == next_pc[i]) begin
-                    branch_mask[i] = 1'b1;
-                end
-            end
-        end
-
-        divergence_detected = primary_valid & branch_valid;
-    end
-
-    // current pc
-    // active mask
-    // saved pc / mask / valid
-    always_ff @(posedge clk) begin
-        if (rst) begin
-            current_pc <= '0;
-            active_mask <= '0; // todo: double check - add a condition of if #threads > #lanes?
-
-            saved_pc <= '0;
-            saved_mask <= '0;
-            saved_path_valid <= 1'b0;
-        end
-        else if (state == S_WRITEBACK) begin
-            if (all_active_done) begin
-                if (saved_path_valid) begin
-                    // current path finished - run deferred path
-                    current_pc <= saved_pc;
-                    active_mask <= saved_mask;
-                    saved_path_valid <= 1'b0;
-                end
-                else begin
-                    active_mask <= '0;
-                end
-            end
-
-            else if (divergence_detected) begin
-                current_pc <= primary_pc;
-                active_mask <= primary_mask;
-
-                // save branch pc and mask to be executed later
-                saved_pc <= branch_pc;
-                saved_mask <= branch_mask;
-                saved_path_valid <= 1'b1;
-
-            end
-            else if (primary_valid) begin // normal execution
-                current_pc <= primary_pc;
-                active_mask <= primary_mask;
-            end
-        end
-    end
+    assign active_mask = '1;
 
 endmodule

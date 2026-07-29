@@ -1,0 +1,120 @@
+# addr      word      source
+00000000  00010137  lui sp, 0x10   ; li
+00000004  174000EF  jal ra, fn_main
+00000008  00100073  ebreak
+0000000C  FEC10113  addi sp, sp, -20
+00000010  00040293  addi t0, s0, 0   ; mv
+00000014  01410413  addi s0, sp, 20
+00000018  FE142E23  sw ra, -4(s0)
+0000001C  FE542C23  sw t0, -8(s0)
+00000020  FEA42A23  sw a0, -12(s0)
+00000024  00000293  addi t0, zero, 0   ; li
+00000028  FFC10113  addi sp, sp, -4   ; push
+0000002C  00512023  sw t0, 0(sp)   ; push
+00000030  00012283  lw t0, 0(sp)   ; pop
+00000034  00410113  addi sp, sp, 4   ; pop
+00000038  FE542823  sw t0, -16(s0)
+0000003C  00100293  addi t0, zero, 1   ; li
+00000040  FFC10113  addi sp, sp, -4   ; push
+00000044  00512023  sw t0, 0(sp)   ; push
+00000048  00012283  lw t0, 0(sp)   ; pop
+0000004C  00410113  addi sp, sp, 4   ; pop
+00000050  FE542623  sw t0, -20(s0)
+00000054  FEC42283  lw t0, -20(s0)
+00000058  FFC10113  addi sp, sp, -4   ; push
+0000005C  00512023  sw t0, 0(sp)   ; push
+00000060  FF442283  lw t0, -12(s0)
+00000064  FFC10113  addi sp, sp, -4   ; push
+00000068  00512023  sw t0, 0(sp)   ; push
+0000006C  00012303  lw t1, 0(sp)   ; pop
+00000070  00410113  addi sp, sp, 4   ; pop
+00000074  00012283  lw t0, 0(sp)   ; pop
+00000078  00410113  addi sp, sp, 4   ; pop
+0000007C  005322B3  slt t0, t1, t0
+00000080  0012C293  xori t0, t0, 1
+00000084  FFC10113  addi sp, sp, -4   ; push
+00000088  00512023  sw t0, 0(sp)   ; push
+0000008C  00012283  lw t0, 0(sp)   ; pop
+00000090  00410113  addi sp, sp, 4   ; pop
+00000094  0A028463  beq t0, zero, __L_while_end_2
+00000098  FF042283  lw t0, -16(s0)
+0000009C  FFC10113  addi sp, sp, -4   ; push
+000000A0  00512023  sw t0, 0(sp)   ; push
+000000A4  FEC42283  lw t0, -20(s0)
+000000A8  FFC10113  addi sp, sp, -4   ; push
+000000AC  00512023  sw t0, 0(sp)   ; push
+000000B0  00012303  lw t1, 0(sp)   ; pop
+000000B4  00410113  addi sp, sp, 4   ; pop
+000000B8  00012283  lw t0, 0(sp)   ; pop
+000000BC  00410113  addi sp, sp, 4   ; pop
+000000C0  006282B3  add t0, t0, t1
+000000C4  FFC10113  addi sp, sp, -4   ; push
+000000C8  00512023  sw t0, 0(sp)   ; push
+000000CC  00012283  lw t0, 0(sp)   ; pop
+000000D0  00410113  addi sp, sp, 4   ; pop
+000000D4  FE542823  sw t0, -16(s0)
+000000D8  FFC10113  addi sp, sp, -4   ; push
+000000DC  00512023  sw t0, 0(sp)   ; push
+000000E0  00012283  lw t0, 0(sp)   ; pop
+000000E4  00410113  addi sp, sp, 4   ; pop
+000000E8  FEC42283  lw t0, -20(s0)
+000000EC  FFC10113  addi sp, sp, -4   ; push
+000000F0  00512023  sw t0, 0(sp)   ; push
+000000F4  00100293  addi t0, zero, 1   ; li
+000000F8  FFC10113  addi sp, sp, -4   ; push
+000000FC  00512023  sw t0, 0(sp)   ; push
+00000100  00012303  lw t1, 0(sp)   ; pop
+00000104  00410113  addi sp, sp, 4   ; pop
+00000108  00012283  lw t0, 0(sp)   ; pop
+0000010C  00410113  addi sp, sp, 4   ; pop
+00000110  006282B3  add t0, t0, t1
+00000114  FFC10113  addi sp, sp, -4   ; push
+00000118  00512023  sw t0, 0(sp)   ; push
+0000011C  00012283  lw t0, 0(sp)   ; pop
+00000120  00410113  addi sp, sp, 4   ; pop
+00000124  FE542623  sw t0, -20(s0)
+00000128  FFC10113  addi sp, sp, -4   ; push
+0000012C  00512023  sw t0, 0(sp)   ; push
+00000130  00012283  lw t0, 0(sp)   ; pop
+00000134  00410113  addi sp, sp, 4   ; pop
+00000138  F1DFF06F  jal zero, __L_while_top_1
+0000013C  FF042283  lw t0, -16(s0)
+00000140  FFC10113  addi sp, sp, -4   ; push
+00000144  00512023  sw t0, 0(sp)   ; push
+00000148  00012283  lw t0, 0(sp)   ; pop
+0000014C  00410113  addi sp, sp, 4   ; pop
+00000150  00028513  addi a0, t0, 0   ; mv
+00000154  FFC42083  lw ra, -4(s0)
+00000158  00040113  addi sp, s0, 0   ; mv
+0000015C  FF842403  lw s0, -8(s0)
+00000160  00008067  jalr zero, ra, 0   ; ret
+00000164  00000513  addi a0, zero, 0   ; li
+00000168  FFC42083  lw ra, -4(s0)
+0000016C  00040113  addi sp, s0, 0   ; mv
+00000170  FF842403  lw s0, -8(s0)
+00000174  00008067  jalr zero, ra, 0   ; ret
+00000178  FF810113  addi sp, sp, -8
+0000017C  00040293  addi t0, s0, 0   ; mv
+00000180  00810413  addi s0, sp, 8
+00000184  FE142E23  sw ra, -4(s0)
+00000188  FE542C23  sw t0, -8(s0)
+0000018C  00A00293  addi t0, zero, 10   ; li
+00000190  FFC10113  addi sp, sp, -4   ; push
+00000194  00512023  sw t0, 0(sp)   ; push
+00000198  00012503  lw a0, 0(sp)   ; pop
+0000019C  00410113  addi sp, sp, 4   ; pop
+000001A0  E6DFF0EF  jal ra, fn_sum
+000001A4  FFC10113  addi sp, sp, -4   ; push
+000001A8  00A12023  sw a0, 0(sp)   ; push
+000001AC  00012283  lw t0, 0(sp)   ; pop
+000001B0  00410113  addi sp, sp, 4   ; pop
+000001B4  00028513  addi a0, t0, 0   ; mv
+000001B8  FFC42083  lw ra, -4(s0)
+000001BC  00040113  addi sp, s0, 0   ; mv
+000001C0  FF842403  lw s0, -8(s0)
+000001C4  00008067  jalr zero, ra, 0   ; ret
+000001C8  00000513  addi a0, zero, 0   ; li
+000001CC  FFC42083  lw ra, -4(s0)
+000001D0  00040113  addi sp, s0, 0   ; mv
+000001D4  FF842403  lw s0, -8(s0)
+000001D8  00008067  jalr zero, ra, 0   ; ret

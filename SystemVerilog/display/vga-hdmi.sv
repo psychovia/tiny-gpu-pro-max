@@ -74,8 +74,14 @@ module vga
     Mux2to1 #(.WIDTH(10)) row_mux (.I0(10'd0), .I1(actual_row),
                 .S(vdisp), .Y(row));
 
-    // active-low sync pulses out to the HDMI IP; blank whenever we're
-    // outside EITHER the horizontal or vertical visible window
+    // SYNC POLARITY: active-low, and DO NOT "correct" this to positive.
+    //
+    // VESA nominally specifies positive sync for 800x600@60, and on that basis
+    // this was briefly changed to `hsync`/`vsync`. That was wrong in practice:
+    // lab3_src/vga2.sv drives this exact 1056x628 @ 40MHz timing with ~hsync /
+    // ~vsync through the same clk_wiz and the same HDMI transmitter, and it
+    // displays correctly on this board and this monitor. A working reference on
+    // the real hardware outranks the spec sheet.
     assign HS = ~hsync;
     assign VS = ~vsync;
     assign blank = ~(hdisp && vdisp);

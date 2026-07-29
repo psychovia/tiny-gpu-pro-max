@@ -1,0 +1,10 @@
+// mems/prog.mem
+// Minimal smoke-test program, loaded by shared_mem.sv's $readmemb at
+// PROG_BASE (word 0). One instruction is enough: every lane executes it
+// in lockstep and immediately marks itself done, so passing this test
+// just confirms the fetch/execute/writeback/done/kernel_done pipeline
+// actually works end to end.
+//
+// addi x31, x0, 1
+//   imm[11:0]=000000000001  rs1=x0(00000)  funct3=000  rd=x31(11111)  opcode=0010011 (OP-IMM)
+00000000000100000000111110010011

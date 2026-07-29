@@ -1,0 +1,7 @@
+Running: xsim.dir/test_shared_mem_tb_snap/xsimk -runall -simmode gui -wdb test_shared_mem_tb_snap.wdb -simrunnum 0 -socket 40277
+Design successfully loaded
+Design Loading Memory Usage: 194384 KB (Peak: 194384 KB)
+Design Loading CPU Usage: 590 ms
+Simulation completed
+Simulation Memory Usage: 281188 KB (Peak: 333652 KB)
+Simulation CPU Usage: 590 ms

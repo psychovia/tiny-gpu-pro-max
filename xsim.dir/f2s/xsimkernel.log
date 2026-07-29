@@ -1,0 +1,7 @@
+Running: xsim.dir/f2s/xsimk -runall -simmode gui -wdb f2s.wdb -simrunnum 0 -socket 52629
+Design successfully loaded
+Design Loading Memory Usage: 194664 KB (Peak: 194672 KB)
+Design Loading CPU Usage: 570 ms
+Simulation completed
+Simulation Memory Usage: 268656 KB (Peak: 333932 KB)
+Simulation CPU Usage: 1080 ms

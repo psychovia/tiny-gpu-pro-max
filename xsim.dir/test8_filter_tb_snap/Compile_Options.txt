@@ -1,0 +1,1 @@
+-timescale "1ns/1ps" "test8_filter_tb" -s "test8_filter_tb_snap" -log ".sim/test8_filter_tb.elab.log" 

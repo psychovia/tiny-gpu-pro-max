@@ -1,0 +1,1 @@
+-timescale "1ns/1ps" "frame_probe2" -s "f2s" -log "/tmp/claude-1000/-home/a44bba1c-823c-4818-b236-add25c6f5ea2/scratchpad/f2e.log" 

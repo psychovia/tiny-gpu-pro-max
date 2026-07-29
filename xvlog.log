@@ -1,0 +1,30 @@
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/tiny-gpu-pro-max-main/SystemVerilog/gpu_pkg.sv" into library work
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/tiny-gpu-pro-max-main/SystemVerilog/library.sv" into library work
+INFO: [VRFC 10-311] analyzing module Counter
+INFO: [VRFC 10-311] analyzing module Comparator
+INFO: [VRFC 10-311] analyzing module RangeCheck
+INFO: [VRFC 10-311] analyzing module Subtracter
+INFO: [VRFC 10-311] analyzing module Mux2to1
+INFO: [VRFC 10-311] analyzing module Counter_5
+INFO: [VRFC 10-311] analyzing module Counter_2
+INFO: [VRFC 10-311] analyzing module Synchronizer
+INFO: [VRFC 10-311] analyzing module areaCheck
+INFO: [VRFC 10-311] analyzing module Counter_any
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/tiny-gpu-pro-max-main/SystemVerilog/cpu.sv" into library work
+INFO: [VRFC 10-311] analyzing module cpu
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/tiny-gpu-pro-max-main/SystemVerilog/pc.sv" into library work
+INFO: [VRFC 10-311] analyzing module pc
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/tiny-gpu-pro-max-main/SystemVerilog/decoder.sv" into library work
+INFO: [VRFC 10-311] analyzing module decoder
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/tiny-gpu-pro-max-main/SystemVerilog/fetcher.sv" into library work
+INFO: [VRFC 10-311] analyzing module fetcher
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/tiny-gpu-pro-max-main/SystemVerilog/scheduler.sv" into library work
+INFO: [VRFC 10-311] analyzing module scheduler
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/tiny-gpu-pro-max-main/SystemVerilog/core.sv" into library work
+INFO: [VRFC 10-311] analyzing module core
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/tiny-gpu-pro-max-main/SystemVerilog/shared_mem.sv" into library work
+INFO: [VRFC 10-311] analyzing module shared_mem
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/tiny-gpu-pro-max-main/SystemVerilog/data_buffer.sv" into library work
+INFO: [VRFC 10-311] analyzing module data_buffer
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/tiny-gpu-pro-max-main/testbenches/tb_harness.sv" into library work
+INFO: [VRFC 10-311] analyzing module tb_harness

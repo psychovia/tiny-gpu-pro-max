@@ -1,0 +1,1 @@
+-timescale "1ns/1ps" "test8_filter_tb" -s "t8" -log "/tmp/claude-1000/-home/a44bba1c-823c-4818-b236-add25c6f5ea2/scratchpad/t8e.log" 

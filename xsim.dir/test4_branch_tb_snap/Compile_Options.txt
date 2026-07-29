@@ -1,0 +1,1 @@
+-timescale "1ns/1ps" "test4_branch_tb" -s "test4_branch_tb_snap" -log ".sim/test4_branch_tb.elab.log" 

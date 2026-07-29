@@ -1,0 +1,241 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
+| Date         : Wed Jul 29 00:52:44 2026
+| Host         : 0m5awdtvxwbq595qv625cz735n running 64-bit Ubuntu 24.04.4 LTS
+| Command      : report_drc -file top_drc_opted.rpt -pb top_drc_opted.pb -rpx top_drc_opted.rpx
+| Design       : top
+| Device       : xc7s50csga324-1
+| Speed File   : -1
+| Design State : Synthesized
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Report DRC
+
+Table of Contents
+-----------------
+1. REPORT SUMMARY
+2. REPORT DETAILS
+
+1. REPORT SUMMARY
+-----------------
+            Netlist: netlist
+          Floorplan: checkpoint_top
+      Design limits: <entire design considered>
+           Ruledeck: default
+             Max checks: <unlimited>
+             Checks found: 41
++--------+----------+------------------+--------+
+| Rule   | Severity | Description      | Checks |
++--------+----------+------------------+--------+
+| DPIP-1 | Warning  | Input pipelining | 41     |
++--------+----------+------------------+--------+
+
+2. REPORT DETAILS
+-----------------
+DPIP-1#1 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[0].u_cpu/alu_result_comb0 input u_gpu/u_core/lane[0].u_cpu/alu_result_comb0/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#2 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[0].u_cpu/alu_result_comb0 input u_gpu/u_core/lane[0].u_cpu/alu_result_comb0/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#3 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[0].u_cpu/alu_result_comb0__0 input u_gpu/u_core/lane[0].u_cpu/alu_result_comb0__0/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#4 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[0].u_cpu/alu_result_comb0__0 input u_gpu/u_core/lane[0].u_cpu/alu_result_comb0__0/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#5 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[0].u_cpu/alu_result_comb0__1 input u_gpu/u_core/lane[0].u_cpu/alu_result_comb0__1/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#6 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[0].u_cpu/alu_result_comb0__1 input u_gpu/u_core/lane[0].u_cpu/alu_result_comb0__1/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#7 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[1].u_cpu/alu_result_comb0 input u_gpu/u_core/lane[1].u_cpu/alu_result_comb0/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#8 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[1].u_cpu/alu_result_comb0 input u_gpu/u_core/lane[1].u_cpu/alu_result_comb0/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#9 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[1].u_cpu/alu_result_comb0__0 input u_gpu/u_core/lane[1].u_cpu/alu_result_comb0__0/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#10 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[1].u_cpu/alu_result_comb0__0 input u_gpu/u_core/lane[1].u_cpu/alu_result_comb0__0/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#11 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[1].u_cpu/alu_result_comb0__1 input u_gpu/u_core/lane[1].u_cpu/alu_result_comb0__1/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#12 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[2].u_cpu/alu_result_comb0 input u_gpu/u_core/lane[2].u_cpu/alu_result_comb0/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#13 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[2].u_cpu/alu_result_comb0 input u_gpu/u_core/lane[2].u_cpu/alu_result_comb0/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#14 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[2].u_cpu/alu_result_comb0__0 input u_gpu/u_core/lane[2].u_cpu/alu_result_comb0__0/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#15 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[2].u_cpu/alu_result_comb0__0 input u_gpu/u_core/lane[2].u_cpu/alu_result_comb0__0/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#16 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[2].u_cpu/alu_result_comb0__1 input u_gpu/u_core/lane[2].u_cpu/alu_result_comb0__1/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#17 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[3].u_cpu/alu_result_comb0 input u_gpu/u_core/lane[3].u_cpu/alu_result_comb0/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#18 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[3].u_cpu/alu_result_comb0 input u_gpu/u_core/lane[3].u_cpu/alu_result_comb0/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#19 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[3].u_cpu/alu_result_comb0__0 input u_gpu/u_core/lane[3].u_cpu/alu_result_comb0__0/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#20 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[3].u_cpu/alu_result_comb0__0 input u_gpu/u_core/lane[3].u_cpu/alu_result_comb0__0/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#21 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[3].u_cpu/alu_result_comb0__1 input u_gpu/u_core/lane[3].u_cpu/alu_result_comb0__1/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#22 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[4].u_cpu/alu_result_comb0 input u_gpu/u_core/lane[4].u_cpu/alu_result_comb0/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#23 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[4].u_cpu/alu_result_comb0 input u_gpu/u_core/lane[4].u_cpu/alu_result_comb0/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#24 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[4].u_cpu/alu_result_comb0__0 input u_gpu/u_core/lane[4].u_cpu/alu_result_comb0__0/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#25 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[4].u_cpu/alu_result_comb0__0 input u_gpu/u_core/lane[4].u_cpu/alu_result_comb0__0/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#26 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[4].u_cpu/alu_result_comb0__1 input u_gpu/u_core/lane[4].u_cpu/alu_result_comb0__1/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#27 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[5].u_cpu/alu_result_comb0 input u_gpu/u_core/lane[5].u_cpu/alu_result_comb0/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#28 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[5].u_cpu/alu_result_comb0 input u_gpu/u_core/lane[5].u_cpu/alu_result_comb0/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#29 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[5].u_cpu/alu_result_comb0__0 input u_gpu/u_core/lane[5].u_cpu/alu_result_comb0__0/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#30 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[5].u_cpu/alu_result_comb0__0 input u_gpu/u_core/lane[5].u_cpu/alu_result_comb0__0/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#31 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[5].u_cpu/alu_result_comb0__1 input u_gpu/u_core/lane[5].u_cpu/alu_result_comb0__1/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#32 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[6].u_cpu/alu_result_comb0 input u_gpu/u_core/lane[6].u_cpu/alu_result_comb0/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#33 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[6].u_cpu/alu_result_comb0 input u_gpu/u_core/lane[6].u_cpu/alu_result_comb0/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#34 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[6].u_cpu/alu_result_comb0__0 input u_gpu/u_core/lane[6].u_cpu/alu_result_comb0__0/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#35 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[6].u_cpu/alu_result_comb0__0 input u_gpu/u_core/lane[6].u_cpu/alu_result_comb0__0/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#36 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[6].u_cpu/alu_result_comb0__1 input u_gpu/u_core/lane[6].u_cpu/alu_result_comb0__1/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#37 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[7].u_cpu/alu_result_comb0 input u_gpu/u_core/lane[7].u_cpu/alu_result_comb0/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#38 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[7].u_cpu/alu_result_comb0 input u_gpu/u_core/lane[7].u_cpu/alu_result_comb0/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#39 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[7].u_cpu/alu_result_comb0__0 input u_gpu/u_core/lane[7].u_cpu/alu_result_comb0__0/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#40 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[7].u_cpu/alu_result_comb0__0 input u_gpu/u_core/lane[7].u_cpu/alu_result_comb0__0/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#41 Warning
+Input pipelining  
+DSP u_gpu/u_core/lane[7].u_cpu/alu_result_comb0__1 input u_gpu/u_core/lane[7].u_cpu/alu_result_comb0__1/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+

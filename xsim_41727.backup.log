@@ -1,0 +1,33 @@
+#-----------------------------------------------------------
+# xsim v2025.2 (64-bit)
+# SW Build 6299465 on Fri Nov 14 12:34:56 MST 2025
+# IP Build 6300035 on Fri Nov 14 10:48:45 MST 2025
+# SharedData Build 6298862 on Thu Nov 13 04:50:51 MST 2025
+# Start of session at: Sun Jul 26 20:09:08 2026
+# Process ID         : 41727
+# Current directory  : /home/tiny-gpu-pro-max-main
+# Command line       : xsim -mode tcl -source {xsim.dir/test0_sim/xsim_script.tcl}
+# Log file           : /home/tiny-gpu-pro-max-main/xsim.log
+# Journal file       : /home/tiny-gpu-pro-max-main/xsim.jou
+# Running On         : 0m5awdtvxwbq595qv625cz735n
+# Platform           : Ubuntu
+# Operating System   : Ubuntu 24.04.4 LTS
+# Processor Detail   : AMD EPYC 9V45 96-Core Processor
+# CPU Frequency      : 2596.099 MHz
+# CPU Physical cores : 4
+# CPU Logical cores  : 8
+# Host memory        : 33652 MB
+# Swap memory        : 0 MB
+# Total Virtual      : 33652 MB
+# Available Virtual  : 26276 MB
+#-----------------------------------------------------------
+source xsim.dir/test0_sim/xsim_script.tcl
+# xsim {test0_sim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PASS: kernel_done asserted after 5 cycles
+PASS: all 8 lanes latched x31 == 1
+$finish called at time : 75 ns : File "/home/tiny-gpu-pro-max-main/testbenches/test0.sv" Line 98
+exit
+INFO: xsimkernel Simulation Memory Usage: 277384 KB (Peak: 334656 KB), Simulation CPU Usage: 580 ms
+INFO: [Common 17-206] Exiting xsim at Sun Jul 26 20:09:10 2026...

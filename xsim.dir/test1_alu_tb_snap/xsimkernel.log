@@ -1,0 +1,7 @@
+Running: xsim.dir/test1_alu_tb_snap/xsimk -runall -simmode gui -wdb test1_alu_tb_snap.wdb -simrunnum 0 -socket 43201
+Design successfully loaded
+Design Loading Memory Usage: 196352 KB (Peak: 196360 KB)
+Design Loading CPU Usage: 590 ms
+Simulation completed
+Simulation Memory Usage: 270344 KB (Peak: 335620 KB)
+Simulation CPU Usage: 590 ms

@@ -1,0 +1,57 @@
+#-----------------------------------------------------------
+# xsim v2025.2 (64-bit)
+# SW Build 6299465 on Fri Nov 14 12:34:56 MST 2025
+# IP Build 6300035 on Fri Nov 14 10:48:45 MST 2025
+# SharedData Build 6298862 on Thu Nov 13 04:50:51 MST 2025
+# Start of session at: Sun Jul 26 20:33:18 2026
+# Process ID         : 56599
+# Current directory  : /home/tiny-gpu-pro-max-main
+# Command line       : xsim -mode tcl -source {xsim.dir/test0_sim/xsim_script.tcl}
+# Log file           : /home/tiny-gpu-pro-max-main/xsim.log
+# Journal file       : /home/tiny-gpu-pro-max-main/xsim.jou
+# Running On         : 0m5awdtvxwbq595qv625cz735n
+# Platform           : Ubuntu
+# Operating System   : Ubuntu 24.04.4 LTS
+# Processor Detail   : AMD EPYC 9V45 96-Core Processor
+# CPU Frequency      : 4518.607 MHz
+# CPU Physical cores : 4
+# CPU Logical cores  : 8
+# Host memory        : 33652 MB
+# Swap memory        : 0 MB
+# Total Virtual      : 33652 MB
+# Available Virtual  : 25886 MB
+#-----------------------------------------------------------
+source xsim.dir/test0_sim/xsim_script.tcl
+# xsim {test0_sim} -autoloadwcfg -tclbatch {/tmp/claude-1000/-home/cd0f4afb-35bd-4257-93ad-a4e27daf43a7/scratchpad/probe.tcl}
+Time resolution is 1 ps
+source /tmp/claude-1000/-home/cd0f4afb-35bd-4257-93ad-a4e27daf43a7/scratchpad/probe.tcl
+## run 40 ns
+## puts "PROBE_START"
+PROBE_START
+## puts "kernel_done = [get_value -radix bin /test0/kernel_done]"
+kernel_done = 0
+## puts "mem_0    = [get_value -radix bin /test0/u_shared_mem/mem\[0\]]"
+mem_0    = 00000000000100000000111110010011
+## puts "mem_1    = [get_value -radix bin /test0/u_shared_mem/mem\[1\]]"
+mem_1    = XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+## puts "mem_2    = [get_value -radix bin /test0/u_shared_mem/mem\[2\]]"
+mem_2    = XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+## puts "mem_1024 = [get_value -radix bin /test0/u_shared_mem/mem\[1024\]]"
+mem_1024 = 00000000000000000000000000000000
+## puts "mem_4095 = [get_value -radix bin /test0/u_shared_mem/mem\[4095\]]"
+mem_4095 = 00000000000000000000000000000000
+## puts "instr    = [get_value -radix hex /test0/u_core/instr]"
+instr    = 00100f93
+## puts "rdata0   = [get_value -radix hex /test0/mem_rdata\[0\]]"
+rdata0   = 00100f93
+## puts "disp_rd  = [get_value -radix hex /test0/disp_rdata]"
+disp_rd  = 00100f93
+## puts "x31_l0   = [get_value -radix hex /test0/lane_x31\[0\]]"
+x31_l0   = 00000000
+## puts "PROBE_END"
+PROBE_END
+## quit -force
+expected integer but got "-force"
+    while executing
+"quit -force"
+    (file "/tmp/claude-1000/-home/cd0f4afb-35bd-4257-93ad-a4e27daf43a7/scratchpad/probe.tcl" line 14)

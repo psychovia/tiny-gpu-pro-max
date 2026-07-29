@@ -1,4 +1,8 @@
 /**
+If you ever want real per-thread branching later, it'd need to be built properly — each lane computing its own next-PC (which means more than one pc.sv, wired per-lane) — and only then would logic like what I removed make sense again.
+**/
+
+/**
 ARCHIVE ONLY -- not compiled/included into the design.
 
 This is the block-dispatch bookkeeping that used to live inline in

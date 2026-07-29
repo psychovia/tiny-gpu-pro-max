@@ -1,0 +1,47 @@
+#-----------------------------------------------------------
+# xsim v2025.2 (64-bit)
+# SW Build 6299465 on Fri Nov 14 12:34:56 MST 2025
+# IP Build 6300035 on Fri Nov 14 10:48:45 MST 2025
+# SharedData Build 6298862 on Thu Nov 13 04:50:51 MST 2025
+# Start of session at: Sun Jul 26 20:36:11 2026
+# Process ID         : 57202
+# Current directory  : /home/tiny-gpu-pro-max-main
+# Command line       : xsim -mode tcl -source {xsim.dir/test0_sim/xsim_script.tcl}
+# Log file           : /home/tiny-gpu-pro-max-main/xsim.log
+# Journal file       : /home/tiny-gpu-pro-max-main/xsim.jou
+# Running On         : 0m5awdtvxwbq595qv625cz735n
+# Platform           : Ubuntu
+# Operating System   : Ubuntu 24.04.4 LTS
+# Processor Detail   : AMD EPYC 9V45 96-Core Processor
+# CPU Frequency      : 4385.706 MHz
+# CPU Physical cores : 4
+# CPU Logical cores  : 8
+# Host memory        : 33652 MB
+# Swap memory        : 0 MB
+# Total Virtual      : 33652 MB
+# Available Virtual  : 25915 MB
+#-----------------------------------------------------------
+source xsim.dir/test0_sim/xsim_script.tcl
+# xsim {test0_sim} -autoloadwcfg -tclbatch {/tmp/claude-1000/-home/cd0f4afb-35bd-4257-93ad-a4e27daf43a7/scratchpad/probe2.tcl}
+Time resolution is 1 ps
+source /tmp/claude-1000/-home/cd0f4afb-35bd-4257-93ad-a4e27daf43a7/scratchpad/probe2.tcl
+## run 70 ns
+## puts "PROBE_START"
+PROBE_START
+## puts "kernel_done = [get_value -radix bin /test0/kernel_done]"
+kernel_done = 1
+## puts "state    = [get_value -radix unsigned /test0/u_core/state]"
+state    = 0
+## puts "instr    = [get_value -radix hex /test0/u_core/instr]"
+instr    = 00100f93
+## puts "opcode   = [get_value -radix bin /test0/u_core/opcode]"
+opcode   = 0010011
+## puts "pc       = [get_value -radix hex /test0/u_core/pc]"
+pc       = 00000004
+## puts "memaddr0 = [get_value -radix hex /test0/mem_addr\[0\]]"
+memaddr0 = 00000004
+## puts "rdata0   = [get_value -radix hex /test0/mem_rdata\[0\]]"
+rdata0   = 00100f93
+## puts "x31_l0   = [get_value -radix hex /test0/lane_x31\[0\]]"
+x31_l0   = 00000001
+ERROR: [Simtcl 6-8] No such HDL object /test0/u_core/lane[0]/u_cpu/regs[1]

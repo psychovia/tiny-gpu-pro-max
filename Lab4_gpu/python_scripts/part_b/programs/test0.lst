@@ -1,0 +1,9 @@
+# addr      word      source
+00000000  00000893  addi a7, zero, 0   ; li
+00000004  04800513  addi a0, zero, 72   ; li
+00000008  00000073  ecall
+0000000C  06900513  addi a0, zero, 105   ; li
+00000010  00000073  ecall
+00000014  00A00513  addi a0, zero, 10   ; li
+00000018  00000073  ecall
+0000001C  00100073  ebreak   ; halt

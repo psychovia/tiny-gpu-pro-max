@@ -1,0 +1,1 @@
+-timescale "1ns/1ps" "test_decoder_tb" -s "test_decoder_tb_snap" -log ".sim/test_decoder_tb.elab.log" 

@@ -1,0 +1,24 @@
+#-----------------------------------------------------------
+# Vivado v2025.2 (64-bit)
+# SW Build 6299465 on Fri Nov 14 12:34:56 MST 2025
+# IP Build 6300035 on Fri Nov 14 10:48:45 MST 2025
+# SharedData Build 6298862 on Thu Nov 13 04:50:51 MST 2025
+# Start of session at: Tue Jul 28 22:29:28 2026
+# Process ID         : 226532
+# Current directory  : /home/tiny-gpu-pro-max-main/build/vivado_hdmi_test/hdmi_test.runs/synth_1
+# Command line       : vivado -log hdmi_test_top.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source hdmi_test_top.tcl
+# Log file           : /home/tiny-gpu-pro-max-main/build/vivado_hdmi_test/hdmi_test.runs/synth_1/hdmi_test_top.vds
+# Journal file       : /home/tiny-gpu-pro-max-main/build/vivado_hdmi_test/hdmi_test.runs/synth_1/vivado.jou
+# Running On         : 0m5awdtvxwbq595qv625cz735n
+# Platform           : Ubuntu
+# Operating System   : Ubuntu 24.04.4 LTS
+# Processor Detail   : AMD EPYC 9V45 96-Core Processor
+# CPU Frequency      : 2596.121 MHz
+# CPU Physical cores : 4
+# CPU Logical cores  : 8
+# Host memory        : 33652 MB
+# Swap memory        : 0 MB
+# Total Virtual      : 33652 MB
+# Available Virtual  : 26964 MB
+#-----------------------------------------------------------
+source hdmi_test_top.tcl -notrace

@@ -1,0 +1,273 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
+| Date         : Wed Jul 29 00:53:12 2026
+| Host         : 0m5awdtvxwbq595qv625cz735n running 64-bit Ubuntu 24.04.4 LTS
+| Command      : report_control_sets -verbose -file top_control_sets_placed.rpt
+| Design       : top
+| Device       : xc7s50
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Control Set Information
+
+Table of Contents
+-----------------
+1. Summary
+2. Histogram
+3. Flip-Flop Distribution
+4. Detailed Control Set Information
+
+1. Summary
+----------
+
++----------------------------------------------------------+-------+
+|                          Status                          | Count |
++----------------------------------------------------------+-------+
+| Total control sets                                       |   195 |
+|    Minimum number of control sets                        |   195 |
+|    Addition due to synthesis replication                 |     0 |
+|    Addition due to physical synthesis replication        |     0 |
+| Unused register locations in slices containing registers |    42 |
++----------------------------------------------------------+-------+
+* Control sets can be merged at opt_design using control_set_merge or merge_equivalent_drivers
+** Run report_qor_suggestions for automated merging and remapping suggestions
+
+
+2. Histogram
+------------
+
++--------------------+-------+
+|       Fanout       | Count |
++--------------------+-------+
+| Total control sets |   195 |
+| >= 0 to < 4        |     0 |
+| >= 4 to < 6        |     0 |
+| >= 6 to < 8        |     1 |
+| >= 8 to < 10       |     1 |
+| >= 10 to < 12      |     2 |
+| >= 12 to < 14      |     0 |
+| >= 14 to < 16      |     0 |
+| >= 16              |   191 |
++--------------------+-------+
+* Control sets can be remapped at either synth_design or opt_design
+
+
+3. Flip-Flop Distribution
+-------------------------
+
++--------------+-----------------------+------------------------+-----------------+--------------+
+| Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
++--------------+-----------------------+------------------------+-----------------+--------------+
+| No           | No                    | No                     |              54 |           28 |
+| No           | No                    | Yes                    |              42 |           17 |
+| No           | Yes                   | No                     |              49 |           23 |
+| Yes          | No                    | No                     |            1214 |          494 |
+| Yes          | No                    | Yes                    |               0 |            0 |
+| Yes          | Yes                   | No                     |            8495 |         3702 |
++--------------+-----------------------+------------------------+-----------------+--------------+
+
+
+4. Detailed Control Set Information
+-----------------------------------
+
++------------------------+---------------------------------------------------------+-------------------------------------------------------+------------------+----------------+--------------+
+|      Clock Signal      |                      Enable Signal                      |                    Set/Reset Signal                   | Slice Load Count | Bel Load Count | Bels / Slice |
++------------------------+---------------------------------------------------------+-------------------------------------------------------+------------------+----------------+--------------+
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/FSM_onehot_state[5]_i_1_n_0    | sync_reset/reset_sync                                 |                1 |              6 |         6.00 |
+|  clk_wiz/inst/clk_out1 |                                                         | u_gpu/u_core/u_scheduler/p_10_out                     |                3 |              8 |         2.67 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_display_controller/vga_gen/col_counter/E[0]     | u_gpu/u_display_controller/vga_gen/col_counter/SR[0]  |                3 |             10 |         3.33 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_display_controller/vga_gen/col_counter/hen      | u_gpu/u_display_controller/vga_gen/col_counter/hcl    |                2 |             11 |         5.50 |
+|  clk_wiz/inst/clk_out1 | sync_reset/E[0]                                         |                                                       |               10 |             24 |         2.40 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/lane[0].u_cpu/i___2__0_n_0                 | sync_reset/reset_sync                                 |               16 |             32 |         2.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/lane[3].u_cpu/FSM_onehot_state_reg[5]_0[0] | u_gpu/u_core/u_scheduler/FSM_onehot_state_reg[2]_6[0] |               11 |             32 |         2.91 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/lane[0].u_cpu/i___2__1_n_0                 | sync_reset/reset_sync                                 |               13 |             32 |         2.46 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/lane[0].u_cpu/i___2__2_n_0                 | sync_reset/reset_sync                                 |               12 |             32 |         2.67 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/lane[0].u_cpu/i___2__3_n_0                 | sync_reset/reset_sync                                 |               11 |             32 |         2.91 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/lane[0].u_cpu/i___2__4_n_0                 | sync_reset/reset_sync                                 |               11 |             32 |         2.91 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/lane[0].u_cpu/i___2_n_0                    | sync_reset/reset_sync                                 |               13 |             32 |         2.46 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_data_buffer/dt_rdata[6][31]_i_1_n_0             |                                                       |               17 |             32 |         1.88 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_data_buffer/dt_rdata[5][31]_i_1_n_0             |                                                       |               15 |             32 |         2.13 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/lane[3].u_cpu/FSM_onehot_state_reg[5]_0[0] | u_gpu/u_core/u_scheduler/FSM_onehot_state_reg[2]_0[0] |               18 |             32 |         1.78 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/lane[3].u_cpu/FSM_onehot_state_reg[5]_0[0] | u_gpu/u_core/u_scheduler/FSM_onehot_state_reg[2]_1[0] |               14 |             32 |         2.29 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/lane[3].u_cpu/FSM_onehot_state_reg[5]_0[0] | u_gpu/u_core/u_scheduler/FSM_onehot_state_reg[2]_4[0] |               10 |             32 |         3.20 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/lane[3].u_cpu/FSM_onehot_state_reg[5]_0[0] | u_gpu/u_core/u_scheduler/FSM_onehot_state_reg[2]_2[0] |                9 |             32 |         3.56 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/lane[3].u_cpu/FSM_onehot_state_reg[5]_0[0] | u_gpu/u_core/u_scheduler/FSM_onehot_state_reg[2]_3[0] |               17 |             32 |         1.88 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/lane[3].u_cpu/FSM_onehot_state_reg[5]_0[0] | u_gpu/u_core/u_scheduler/FSM_onehot_state_reg[2]_5[0] |               15 |             32 |         2.13 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_60                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_68[0]                 |                                                       |               15 |             32 |         2.13 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_67[0]                 |                                                       |               11 |             32 |         2.91 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_66[0]                 |                                                       |                6 |             32 |         5.33 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_65[0]                 |                                                       |               15 |             32 |         2.13 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_64[0]                 |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_63[0]                 |                                                       |               13 |             32 |         2.46 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/FSM_onehot_state_reg[1]_1[0]   |                                                       |               13 |             32 |         2.46 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/FSM_onehot_state_reg[1]_0[0]   | sync_reset/reset_sync                                 |               12 |             32 |         2.67 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/E[0]                           |                                                       |               14 |             32 |         2.29 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_9                     |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_8                     |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_7                     |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_62                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_61                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_33[0]              | sync_reset/reset_sync                                 |               13 |             32 |         2.46 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[9]_14[0]               | sync_reset/reset_sync                                 |               17 |             32 |         1.88 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_34[0]              | sync_reset/reset_sync                                 |               12 |             32 |         2.67 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_5[0]               | sync_reset/reset_sync                                 |               14 |             32 |         2.29 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_6[0]               | sync_reset/reset_sync                                 |               18 |             32 |         1.78 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_7[0]               | sync_reset/reset_sync                                 |               17 |             32 |         1.88 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_8[0]               | sync_reset/reset_sync                                 |               16 |             32 |         2.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_9[0]               | sync_reset/reset_sync                                 |               14 |             32 |         2.29 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[11]_6[0]               | sync_reset/reset_sync                                 |               13 |             32 |         2.46 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[11]_7[0]               | sync_reset/reset_sync                                 |               18 |             32 |         1.78 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[11]_8[0]               | sync_reset/reset_sync                                 |               12 |             32 |         2.67 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[7]_10[0]               | sync_reset/reset_sync                                 |               16 |             32 |         2.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[7]_11[0]               | sync_reset/reset_sync                                 |               15 |             32 |         2.13 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[7]_12[0]               | sync_reset/reset_sync                                 |                9 |             32 |         3.56 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[8]_16[0]               | sync_reset/reset_sync                                 |               21 |             32 |         1.52 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[8]_17[0]               | sync_reset/reset_sync                                 |               18 |             32 |         1.78 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/lane[3].u_cpu/FSM_onehot_state_reg[5]_0[0] | u_gpu/u_core/u_scheduler/SR[0]                        |               15 |             32 |         2.13 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[9]_15[0]               | sync_reset/reset_sync                                 |               13 |             32 |         2.46 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_16[0]              | sync_reset/reset_sync                                 |               13 |             32 |         2.46 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_15[0]              | sync_reset/reset_sync                                 |               13 |             32 |         2.46 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_14[0]              | sync_reset/reset_sync                                 |               16 |             32 |         2.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_13[0]              | sync_reset/reset_sync                                 |               11 |             32 |         2.91 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_12[0]              | sync_reset/reset_sync                                 |               15 |             32 |         2.13 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_11[0]              | sync_reset/reset_sync                                 |               15 |             32 |         2.13 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_10[0]              | sync_reset/reset_sync                                 |               17 |             32 |         1.88 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_data_buffer/dt_rdata[0][31]_i_1_n_0             |                                                       |               17 |             32 |         1.88 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_data_buffer/dt_rdata[1][31]_i_1_n_0             |                                                       |               12 |             32 |         2.67 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_data_buffer/dt_rdata[2][31]_i_1_n_0             |                                                       |               13 |             32 |         2.46 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/sync_reg_1                       | sync_reset/reset_sync                                 |               13 |             32 |         2.46 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_data_buffer/dt_rdata[3][31]_i_1_n_0             |                                                       |               17 |             32 |         1.88 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_data_buffer/dt_rdata[4][31]_i_1_n_0             |                                                       |               15 |             32 |         2.13 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_19                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_31                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_30                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_3                     |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_29                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_28                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_27                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_26                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_25                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_24                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_23                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_22                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_21                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_20                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_2                     |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_59                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_18                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_17                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_16                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_15                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_14                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_13                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_12                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_11                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_10                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_1                     |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_0                     |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg                       |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | sync_reset/sync_reg_2[0]                                |                                                       |               14 |             32 |         2.29 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_data_buffer/dt_rdata[7][31]_i_1_n_0             |                                                       |               12 |             32 |         2.67 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_33                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_6                     |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_58                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_57                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_56                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_55                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_54                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_53                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_52                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_51                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_50                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_5                     |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_49                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_48                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_47                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_46                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_45                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_44                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_43                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_42                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_41                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_40                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_4                     |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_39                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_38                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_37                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_36                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_35                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_34                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/sync_reg_32                    |                                                       |                8 |             32 |         4.00 |
+|  clk_wiz/inst/clk_out1 |                                                         | sync_reset/reset_sync                                 |               20 |             41 |         2.05 |
+|  clk_wiz/inst/clk_out1 |                                                         | vga_to_hdmi/u_hdmiTx/encRed/AR[0]                     |               17 |             42 |         2.47 |
+|  clk_wiz/inst/clk_out1 |                                                         |                                                       |               28 |             54 |         1.93 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/sync_reg                         | sync_reset/sync_reg_0                                 |               43 |             90 |         2.09 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[7]_2[0]                | sync_reset/reset_sync                                 |               39 |             96 |         2.46 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_2[0]               | sync_reset/reset_sync                                 |               46 |             96 |         2.09 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[7]_3[0]                | sync_reset/reset_sync                                 |               42 |             96 |         2.29 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[7]_4[0]                | sync_reset/reset_sync                                 |               42 |             96 |         2.29 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[8]_0[0]                | sync_reset/reset_sync                                 |               46 |             96 |         2.09 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[8]_1[0]                | sync_reset/reset_sync                                 |               44 |             96 |         2.18 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_19[0]              | sync_reset/reset_sync                                 |               38 |             96 |         2.53 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[8]_2[0]                | sync_reset/reset_sync                                 |               38 |             96 |         2.53 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[8]_3[0]                | sync_reset/reset_sync                                 |               43 |             96 |         2.23 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[9]_0[0]                | sync_reset/reset_sync                                 |               39 |             96 |         2.46 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[9]_1[0]                | sync_reset/reset_sync                                 |               43 |             96 |         2.23 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_18[0]              | sync_reset/reset_sync                                 |               38 |             96 |         2.53 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_17[0]              | sync_reset/reset_sync                                 |               42 |             96 |         2.29 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[9]_2[0]                | sync_reset/reset_sync                                 |               40 |             96 |         2.40 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[9]_3[0]                | sync_reset/reset_sync                                 |               38 |             96 |         2.53 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[9]_4[0]                | sync_reset/reset_sync                                 |               34 |             96 |         2.82 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[9]_5[0]                | sync_reset/reset_sync                                 |               41 |             96 |         2.34 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[9]_6[0]                | sync_reset/reset_sync                                 |               40 |             96 |         2.40 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_1[0]               | sync_reset/reset_sync                                 |               44 |             96 |         2.18 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/E[0]                             | sync_reset/reset_sync                                 |               40 |             96 |         2.40 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_21[0]              | sync_reset/reset_sync                                 |               41 |             96 |         2.34 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[11]_2[0]               | sync_reset/reset_sync                                 |               41 |             96 |         2.34 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[11]_1[0]               | sync_reset/reset_sync                                 |               45 |             96 |         2.13 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[11]_0[0]               | sync_reset/reset_sync                                 |               44 |             96 |         2.18 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_24[0]              | sync_reset/reset_sync                                 |               44 |             96 |         2.18 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_23[0]              | sync_reset/reset_sync                                 |               43 |             96 |         2.23 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[7]_0[0]                | sync_reset/reset_sync                                 |               37 |             96 |         2.59 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_22[0]              | sync_reset/reset_sync                                 |               42 |             96 |         2.29 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[7]_1[0]                | sync_reset/reset_sync                                 |               34 |             96 |         2.82 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_20[0]              | sync_reset/reset_sync                                 |               41 |             96 |         2.34 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/sync_reg_0                       | sync_reset/sync_reg_1                                 |               52 |            122 |         2.35 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[9]_8[0]                | sync_reset/reset_sync                                 |               48 |            128 |         2.67 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[11]_3[0]               | sync_reset/reset_sync                                 |               54 |            128 |         2.37 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_31[0]              | sync_reset/reset_sync                                 |               55 |            128 |         2.33 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_26[0]              | sync_reset/reset_sync                                 |               66 |            128 |         1.94 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_27[0]              | sync_reset/reset_sync                                 |               53 |            128 |         2.42 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_28[0]              | sync_reset/reset_sync                                 |               50 |            128 |         2.56 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[9]_7[0]                | sync_reset/reset_sync                                 |               54 |            128 |         2.37 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[9]_9[0]                | sync_reset/reset_sync                                 |               57 |            128 |         2.25 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_30[0]              | sync_reset/reset_sync                                 |               53 |            128 |         2.42 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_29[0]              | sync_reset/reset_sync                                 |               57 |            128 |         2.25 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_0[0]               | sync_reset/reset_sync                                 |               62 |            128 |         2.06 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_4[0]               | sync_reset/reset_sync                                 |               56 |            128 |         2.29 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_3[0]               | sync_reset/reset_sync                                 |               57 |            128 |         2.25 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_25[0]              | sync_reset/reset_sync                                 |               61 |            128 |         2.10 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[7]_5[0]                | sync_reset/reset_sync                                 |               55 |            128 |         2.33 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[7]_6[0]                | sync_reset/reset_sync                                 |               57 |            128 |         2.25 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[7]_7[0]                | sync_reset/reset_sync                                 |               56 |            128 |         2.29 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[7]_8[0]                | sync_reset/reset_sync                                 |               52 |            128 |         2.46 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[7]_9[0]                | sync_reset/reset_sync                                 |               60 |            128 |         2.13 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[10]_32[0]              | sync_reset/reset_sync                                 |               58 |            128 |         2.21 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[9]_13[0]               | sync_reset/reset_sync                                 |               56 |            128 |         2.29 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[8]_4[0]                | sync_reset/reset_sync                                 |               48 |            128 |         2.67 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[8]_5[0]                | sync_reset/reset_sync                                 |               64 |            128 |         2.00 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[8]_6[0]                | sync_reset/reset_sync                                 |               54 |            128 |         2.37 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[8]_7[0]                | sync_reset/reset_sync                                 |               54 |            128 |         2.37 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[11]_5[0]               | sync_reset/reset_sync                                 |               58 |            128 |         2.21 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[11]_4[0]               | sync_reset/reset_sync                                 |               54 |            128 |         2.37 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[9]_10[0]               | sync_reset/reset_sync                                 |               56 |            128 |         2.29 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[9]_11[0]               | sync_reset/reset_sync                                 |               55 |            128 |         2.33 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[9]_12[0]               | sync_reset/reset_sync                                 |               60 |            128 |         2.13 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_scheduler/is_S_FETCH_WAIT                |                                                       |               76 |            150 |         1.97 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/u_fetcher/instr_reg[6]_1[0]                |                                                       |               64 |            240 |         3.75 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/lane[3].u_cpu/FSM_onehot_state_reg[5]_0[0] |                                                       |              117 |            256 |         2.19 |
+|  clk_wiz/inst/clk_out1 | u_gpu/u_core/lane[3].u_cpu/FSM_onehot_state_reg[5][0]   | sync_reset/reset_sync                                 |              126 |            256 |         2.03 |
++------------------------+---------------------------------------------------------+-------------------------------------------------------+------------------+----------------+--------------+
+
+

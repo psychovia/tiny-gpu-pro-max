@@ -1,0 +1,1 @@
+-timescale "1ns/1ps" "test2_rtype_tb" -s "test2_rtype_tb_snap" -log ".sim/test2_rtype_tb.elab.log" 

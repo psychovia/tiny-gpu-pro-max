@@ -1,0 +1,1 @@
+-debug "typical" -timescale "1ns/1ps" "test0" -s "test0_sim" 

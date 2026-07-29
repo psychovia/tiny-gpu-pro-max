@@ -1,0 +1,1 @@
+-timescale "1ns/1ps" "test12_gpu_c_tb" -s "test12_gpu_c_tb_snap" -log ".sim/test12_gpu_c_tb.elab.log" 

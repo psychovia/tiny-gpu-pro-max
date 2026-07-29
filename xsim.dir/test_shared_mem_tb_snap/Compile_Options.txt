@@ -1,0 +1,1 @@
+-timescale "1ns/1ps" "test_shared_mem_tb" -s "test_shared_mem_tb_snap" -log ".sim/test_shared_mem_tb.elab.log" 

@@ -1,0 +1,8 @@
+# addr      word      source
+00000000  00010137  lui sp, 0x10   ; li
+00000004  00500513  addi a0, zero, 5   ; li
+00000008  008000EF  jal ra, f
+0000000C  00100073  ebreak
+00000010  00151513  slli a0, a0, 1
+00000014  00150513  addi a0, a0, 1
+00000018  00008067  jalr zero, ra, 0   ; ret

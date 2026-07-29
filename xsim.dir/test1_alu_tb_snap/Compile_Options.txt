@@ -1,0 +1,1 @@
+-timescale "1ns/1ps" "test1_alu_tb" -s "test1_alu_tb_snap" -log ".sim/test1_alu_tb.elab.log" 

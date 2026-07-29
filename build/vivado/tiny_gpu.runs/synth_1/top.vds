@@ -1,0 +1,1033 @@
+#-----------------------------------------------------------
+# Vivado v2025.2 (64-bit)
+# SW Build 6299465 on Fri Nov 14 12:34:56 MST 2025
+# IP Build 6300035 on Fri Nov 14 10:48:45 MST 2025
+# SharedData Build 6298862 on Thu Nov 13 04:50:51 MST 2025
+# Start of session at: Wed Jul 29 00:50:44 2026
+# Process ID         : 302034
+# Current directory  : /home/tiny-gpu-pro-max-main/build/vivado/tiny_gpu.runs/synth_1
+# Command line       : vivado -log top.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source top.tcl
+# Log file           : /home/tiny-gpu-pro-max-main/build/vivado/tiny_gpu.runs/synth_1/top.vds
+# Journal file       : /home/tiny-gpu-pro-max-main/build/vivado/tiny_gpu.runs/synth_1/vivado.jou
+# Running On         : 0m5awdtvxwbq595qv625cz735n
+# Platform           : Ubuntu
+# Operating System   : Ubuntu 24.04.4 LTS
+# Processor Detail   : AMD EPYC 9V45 96-Core Processor
+# CPU Frequency      : 4518.693 MHz
+# CPU Physical cores : 4
+# CPU Logical cores  : 8
+# Host memory        : 33652 MB
+# Swap memory        : 0 MB
+# Total Virtual      : 33652 MB
+# Available Virtual  : 27088 MB
+#-----------------------------------------------------------
+source top.tcl -notrace
+Command: synth_design -top top -part xc7s50csga324-1 -verilog_define SYNTHESIS
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7s50'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7s50'
+INFO: [Device 21-403] Loading part xc7s50csga324-1
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 7 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 302133
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:02 ; elapsed = 00:00:02 . Memory (MB): peak = 2289.816 ; gain = 205.234 ; free physical = 10235 ; free virtual = 24412
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-11067] parameter 'N_THREADS' declared inside package 'gpu_pkg' shall be treated as localparam [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu_pkg.sv:8]
+WARNING: [Synth 8-11067] parameter 'N_LANES' declared inside package 'gpu_pkg' shall be treated as localparam [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu_pkg.sv:15]
+WARNING: [Synth 8-11067] parameter 'IMG_WIDTH' declared inside package 'gpu_pkg' shall be treated as localparam [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu_pkg.sv:16]
+WARNING: [Synth 8-11067] parameter 'IMG_HEIGHT' declared inside package 'gpu_pkg' shall be treated as localparam [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu_pkg.sv:17]
+WARNING: [Synth 8-11067] parameter 'BYTES_PER_PIXEL' declared inside package 'gpu_pkg' shall be treated as localparam [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu_pkg.sv:18]
+WARNING: [Synth 8-11067] parameter 'IMG_SIZE_BYTES' declared inside package 'gpu_pkg' shall be treated as localparam [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu_pkg.sv:19]
+WARNING: [Synth 8-11067] parameter 'PROG_BASE' declared inside package 'gpu_pkg' shall be treated as localparam [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu_pkg.sv:21]
+WARNING: [Synth 8-11067] parameter 'PROG_SIZE' declared inside package 'gpu_pkg' shall be treated as localparam [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu_pkg.sv:22]
+WARNING: [Synth 8-11067] parameter 'IMG_BASE' declared inside package 'gpu_pkg' shall be treated as localparam [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu_pkg.sv:23]
+WARNING: [Synth 8-11067] parameter 'MMIO_BASE' declared inside package 'gpu_pkg' shall be treated as localparam [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu_pkg.sv:24]
+WARNING: [Synth 8-11067] parameter 'MEM_SIZE_BYTES' declared inside package 'gpu_pkg' shall be treated as localparam [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu_pkg.sv:26]
+WARNING: [Synth 8-11067] parameter 'TOTAL_THREADS' declared inside package 'gpu_pkg' shall be treated as localparam [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu_pkg.sv:31]
+WARNING: [Synth 8-11067] parameter 'NUM_BLOCKS' declared inside package 'gpu_pkg' shall be treated as localparam [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu_pkg.sv:32]
+WARNING: [Synth 8-11067] parameter 'BLOCK_ID_WIDTH' declared inside package 'gpu_pkg' shall be treated as localparam [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu_pkg.sv:33]
+WARNING: [Synth 8-11067] parameter 'DBUF_WORDS' declared inside package 'gpu_pkg' shall be treated as localparam [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu_pkg.sv:53]
+WARNING: [Synth 8-11067] parameter 'OPC_GPU' declared inside package 'gpu_pkg' shall be treated as localparam [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu_pkg.sv:65]
+WARNING: [Synth 8-11067] parameter 'F3_RDTID' declared inside package 'gpu_pkg' shall be treated as localparam [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu_pkg.sv:66]
+WARNING: [Synth 8-11067] parameter 'F3_SETDT' declared inside package 'gpu_pkg' shall be treated as localparam [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu_pkg.sv:67]
+WARNING: [Synth 8-11067] parameter 'F3_GETDT' declared inside package 'gpu_pkg' shall be treated as localparam [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu_pkg.sv:68]
+INFO: [Synth 8-6157] synthesizing module 'top' [/home/tiny-gpu-pro-max-main/SystemVerilog/top.sv:20]
+INFO: [Synth 8-6157] synthesizing module 'clk_wiz_0' [/home/tiny-gpu-pro-max-main/build/vivado/tiny_gpu.runs/synth_1/.Xil/Vivado-302034-0m5awdtvxwbq595qv625cz735n/realtime/clk_wiz_0_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'clk_wiz_0' (0#1) [/home/tiny-gpu-pro-max-main/build/vivado/tiny_gpu.runs/synth_1/.Xil/Vivado-302034-0m5awdtvxwbq595qv625cz735n/realtime/clk_wiz_0_stub.v:6]
+INFO: [Synth 8-6157] synthesizing module 'Synchronizer' [/home/tiny-gpu-pro-max-main/SystemVerilog/library.sv:115]
+INFO: [Synth 8-6155] done synthesizing module 'Synchronizer' (0#1) [/home/tiny-gpu-pro-max-main/SystemVerilog/library.sv:115]
+INFO: [Synth 8-6157] synthesizing module 'gpu' [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:7]
+	Parameter PROG_INIT_FILE bound to: mems/invert_c.mem - type: string 
+	Parameter DBUF_INIT_PREFIX bound to: mems/dbuf_photo_bank - type: string 
+	Parameter DISPLAY_FROM_DBUF bound to: 1'b1 
+INFO: [Synth 8-6157] synthesizing module 'core' [/home/tiny-gpu-pro-max-main/SystemVerilog/core.sv:14]
+INFO: [Synth 8-6157] synthesizing module 'cpu' [/home/tiny-gpu-pro-max-main/SystemVerilog/cpu.sv:5]
+INFO: [Synth 8-226] default block is never used [/home/tiny-gpu-pro-max-main/SystemVerilog/cpu.sv:346]
+INFO: [Synth 8-6155] done synthesizing module 'cpu' (0#1) [/home/tiny-gpu-pro-max-main/SystemVerilog/cpu.sv:5]
+INFO: [Synth 8-6157] synthesizing module 'scheduler' [/home/tiny-gpu-pro-max-main/SystemVerilog/scheduler.sv:38]
+INFO: [Synth 8-6155] done synthesizing module 'scheduler' (0#1) [/home/tiny-gpu-pro-max-main/SystemVerilog/scheduler.sv:38]
+INFO: [Synth 8-6157] synthesizing module 'fetcher' [/home/tiny-gpu-pro-max-main/SystemVerilog/fetcher.sv:9]
+INFO: [Synth 8-6155] done synthesizing module 'fetcher' (0#1) [/home/tiny-gpu-pro-max-main/SystemVerilog/fetcher.sv:9]
+INFO: [Synth 8-6157] synthesizing module 'decoder' [/home/tiny-gpu-pro-max-main/SystemVerilog/decoder.sv:6]
+INFO: [Synth 8-6155] done synthesizing module 'decoder' (0#1) [/home/tiny-gpu-pro-max-main/SystemVerilog/decoder.sv:6]
+INFO: [Synth 8-6157] synthesizing module 'pc' [/home/tiny-gpu-pro-max-main/SystemVerilog/pc.sv:7]
+INFO: [Synth 8-6155] done synthesizing module 'pc' (0#1) [/home/tiny-gpu-pro-max-main/SystemVerilog/pc.sv:7]
+INFO: [Synth 8-6155] done synthesizing module 'core' (0#1) [/home/tiny-gpu-pro-max-main/SystemVerilog/core.sv:14]
+INFO: [Synth 8-6157] synthesizing module 'shared_mem' [/home/tiny-gpu-pro-max-main/SystemVerilog/shared_mem.sv:23]
+	Parameter N_THREADS bound to: 32'sb00000000000000000000000000001000 
+	Parameter PROG_INIT_FILE bound to: mems/invert_c.mem - type: string 
+	Parameter IMG_INIT_FILE bound to: mems/img_source.mem - type: string 
+INFO: [Synth 8-3876] $readmem data file 'mems/invert_c.mem' is read successfully [/home/tiny-gpu-pro-max-main/SystemVerilog/shared_mem.sv:65]
+INFO: [Synth 8-3876] $readmem data file 'mems/img_source.mem' is read successfully [/home/tiny-gpu-pro-max-main/SystemVerilog/shared_mem.sv:66]
+INFO: [Synth 8-6155] done synthesizing module 'shared_mem' (0#1) [/home/tiny-gpu-pro-max-main/SystemVerilog/shared_mem.sv:23]
+INFO: [Synth 8-6157] synthesizing module 'data_buffer' [/home/tiny-gpu-pro-max-main/SystemVerilog/data_buffer.sv:46]
+	Parameter N_THREADS bound to: 32'sb00000000000000000000000000001000 
+	Parameter WORDS bound to: 32'sb00000000000000000001000000000000 
+	Parameter INIT_PREFIX bound to: mems/dbuf_photo_bank - type: string 
+INFO: [Synth 8-3876] $readmem data file 'mems/dbuf_photo_bank0.mem' is read successfully [/home/tiny-gpu-pro-max-main/SystemVerilog/data_buffer.sv:206]
+INFO: [Synth 8-3876] $readmem data file 'mems/dbuf_photo_bank1.mem' is read successfully [/home/tiny-gpu-pro-max-main/SystemVerilog/data_buffer.sv:206]
+INFO: [Synth 8-3876] $readmem data file 'mems/dbuf_photo_bank2.mem' is read successfully [/home/tiny-gpu-pro-max-main/SystemVerilog/data_buffer.sv:206]
+INFO: [Synth 8-3876] $readmem data file 'mems/dbuf_photo_bank3.mem' is read successfully [/home/tiny-gpu-pro-max-main/SystemVerilog/data_buffer.sv:206]
+INFO: [Synth 8-3876] $readmem data file 'mems/dbuf_photo_bank4.mem' is read successfully [/home/tiny-gpu-pro-max-main/SystemVerilog/data_buffer.sv:206]
+INFO: [Synth 8-3876] $readmem data file 'mems/dbuf_photo_bank5.mem' is read successfully [/home/tiny-gpu-pro-max-main/SystemVerilog/data_buffer.sv:206]
+INFO: [Synth 8-3876] $readmem data file 'mems/dbuf_photo_bank6.mem' is read successfully [/home/tiny-gpu-pro-max-main/SystemVerilog/data_buffer.sv:206]
+INFO: [Synth 8-3876] $readmem data file 'mems/dbuf_photo_bank7.mem' is read successfully [/home/tiny-gpu-pro-max-main/SystemVerilog/data_buffer.sv:206]
+INFO: [Synth 8-6155] done synthesizing module 'data_buffer' (0#1) [/home/tiny-gpu-pro-max-main/SystemVerilog/data_buffer.sv:46]
+INFO: [Synth 8-6157] synthesizing module 'display_controller' [/home/tiny-gpu-pro-max-main/SystemVerilog/display/display_ controller.sv:14]
+INFO: [Synth 8-6157] synthesizing module 'vga' [/home/tiny-gpu-pro-max-main/SystemVerilog/display/vga-hdmi.sv:15]
+INFO: [Synth 8-6157] synthesizing module 'Counter' [/home/tiny-gpu-pro-max-main/SystemVerilog/library.sv:3]
+	Parameter WIDTH bound to: 11 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'Counter' (0#1) [/home/tiny-gpu-pro-max-main/SystemVerilog/library.sv:3]
+INFO: [Synth 8-6157] synthesizing module 'Counter__parameterized0' [/home/tiny-gpu-pro-max-main/SystemVerilog/library.sv:3]
+	Parameter WIDTH bound to: 10 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'Counter__parameterized0' (0#1) [/home/tiny-gpu-pro-max-main/SystemVerilog/library.sv:3]
+INFO: [Synth 8-6157] synthesizing module 'Comparator' [/home/tiny-gpu-pro-max-main/SystemVerilog/library.sv:23]
+	Parameter WIDTH bound to: 11 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'Comparator' (0#1) [/home/tiny-gpu-pro-max-main/SystemVerilog/library.sv:23]
+INFO: [Synth 8-6157] synthesizing module 'Comparator__parameterized0' [/home/tiny-gpu-pro-max-main/SystemVerilog/library.sv:23]
+	Parameter WIDTH bound to: 10 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'Comparator__parameterized0' (0#1) [/home/tiny-gpu-pro-max-main/SystemVerilog/library.sv:23]
+INFO: [Synth 8-6157] synthesizing module 'RangeCheck' [/home/tiny-gpu-pro-max-main/SystemVerilog/library.sv:35]
+	Parameter WIDTH bound to: 11 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'RangeCheck' (0#1) [/home/tiny-gpu-pro-max-main/SystemVerilog/library.sv:35]
+INFO: [Synth 8-6157] synthesizing module 'RangeCheck__parameterized0' [/home/tiny-gpu-pro-max-main/SystemVerilog/library.sv:35]
+	Parameter WIDTH bound to: 10 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'RangeCheck__parameterized0' (0#1) [/home/tiny-gpu-pro-max-main/SystemVerilog/library.sv:35]
+INFO: [Synth 8-6157] synthesizing module 'Subtracter' [/home/tiny-gpu-pro-max-main/SystemVerilog/library.sv:46]
+	Parameter WIDTH bound to: 11 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'Subtracter' (0#1) [/home/tiny-gpu-pro-max-main/SystemVerilog/library.sv:46]
+INFO: [Synth 8-6157] synthesizing module 'Subtracter__parameterized0' [/home/tiny-gpu-pro-max-main/SystemVerilog/library.sv:46]
+	Parameter WIDTH bound to: 10 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'Subtracter__parameterized0' (0#1) [/home/tiny-gpu-pro-max-main/SystemVerilog/library.sv:46]
+INFO: [Synth 8-6157] synthesizing module 'Mux2to1' [/home/tiny-gpu-pro-max-main/SystemVerilog/library.sv:63]
+	Parameter WIDTH bound to: 10 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'Mux2to1' (0#1) [/home/tiny-gpu-pro-max-main/SystemVerilog/library.sv:63]
+INFO: [Synth 8-294] found qualifier unique on case statement: implementing as parallel_case [/home/tiny-gpu-pro-max-main/SystemVerilog/display/vga-hdmi.sv:94]
+INFO: [Synth 8-294] found qualifier unique on case statement: implementing as parallel_case [/home/tiny-gpu-pro-max-main/SystemVerilog/display/vga-hdmi.sv:119]
+INFO: [Synth 8-6155] done synthesizing module 'vga' (0#1) [/home/tiny-gpu-pro-max-main/SystemVerilog/display/vga-hdmi.sv:15]
+INFO: [Synth 8-6155] done synthesizing module 'display_controller' (0#1) [/home/tiny-gpu-pro-max-main/SystemVerilog/display/display_ controller.sv:14]
+INFO: [Synth 8-6155] done synthesizing module 'gpu' (0#1) [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:7]
+INFO: [Synth 8-6157] synthesizing module 'hdmi_tx_0' [/home/tiny-gpu-pro-max-main/SystemVerilog/display/hdmi_tx_0.sv:29]
+INFO: [Synth 8-6157] synthesizing module 'hdmiTx' [/home/tiny-gpu-pro-max-main/SystemVerilog/display/hdmiTx.sv:8]
+INFO: [Synth 8-6157] synthesizing module 'tmdsEncoder' [/home/tiny-gpu-pro-max-main/SystemVerilog/display/tmdsEncoder.sv:8]
+INFO: [Synth 8-6155] done synthesizing module 'tmdsEncoder' (0#1) [/home/tiny-gpu-pro-max-main/SystemVerilog/display/tmdsEncoder.sv:8]
+INFO: [Synth 8-6157] synthesizing module 'serializer' [/home/tiny-gpu-pro-max-main/SystemVerilog/display/serializer.sv:9]
+INFO: [Synth 8-6157] synthesizing module 'OSERDESE2' [/mnt/opt/xilinx/Vivado/scripts/rt/data/unisim_comp.v:117832]
+	Parameter DATA_RATE_OQ bound to: DDR - type: string 
+	Parameter DATA_RATE_TQ bound to: SDR - type: string 
+	Parameter DATA_WIDTH bound to: 10 - type: integer 
+	Parameter SERDES_MODE bound to: MASTER - type: string 
+	Parameter TBYTE_CTL bound to: FALSE - type: string 
+	Parameter TBYTE_SRC bound to: FALSE - type: string 
+	Parameter TRISTATE_WIDTH bound to: 1 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'OSERDESE2' (0#1) [/mnt/opt/xilinx/Vivado/scripts/rt/data/unisim_comp.v:117832]
+INFO: [Synth 8-6157] synthesizing module 'OSERDESE2__parameterized0' [/mnt/opt/xilinx/Vivado/scripts/rt/data/unisim_comp.v:117832]
+	Parameter DATA_RATE_OQ bound to: DDR - type: string 
+	Parameter DATA_RATE_TQ bound to: SDR - type: string 
+	Parameter DATA_WIDTH bound to: 10 - type: integer 
+	Parameter SERDES_MODE bound to: SLAVE - type: string 
+	Parameter TBYTE_CTL bound to: FALSE - type: string 
+	Parameter TBYTE_SRC bound to: FALSE - type: string 
+	Parameter TRISTATE_WIDTH bound to: 1 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'OSERDESE2__parameterized0' (0#1) [/mnt/opt/xilinx/Vivado/scripts/rt/data/unisim_comp.v:117832]
+INFO: [Synth 8-6157] synthesizing module 'OBUFDS' [/mnt/opt/xilinx/Vivado/scripts/rt/data/unisim_comp.v:113534]
+INFO: [Synth 8-6155] done synthesizing module 'OBUFDS' (0#1) [/mnt/opt/xilinx/Vivado/scripts/rt/data/unisim_comp.v:113534]
+INFO: [Synth 8-6155] done synthesizing module 'serializer' (0#1) [/home/tiny-gpu-pro-max-main/SystemVerilog/display/serializer.sv:9]
+INFO: [Synth 8-6155] done synthesizing module 'hdmiTx' (0#1) [/home/tiny-gpu-pro-max-main/SystemVerilog/display/hdmiTx.sv:8]
+INFO: [Synth 8-6155] done synthesizing module 'hdmi_tx_0' (0#1) [/home/tiny-gpu-pro-max-main/SystemVerilog/display/hdmi_tx_0.sv:29]
+INFO: [Synth 8-6155] done synthesizing module 'top' (0#1) [/home/tiny-gpu-pro-max-main/SystemVerilog/top.sv:20]
+WARNING: [Synth 8-6014] Unused sequential element word_idx_reg was removed.  [/home/tiny-gpu-pro-max-main/SystemVerilog/shared_mem.sv:150]
+WARNING: [Synth 8-4767] Trying to implement RAM 'mem_addr[7]0' in registers. Block RAM or DRAM implementation is not possible; see log for reasons. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+Reason is one or more of the following :
+	1: RAM's read address port stuck at constant. 
+	2: RAM's read address port stuck at constant. 
+	3: RAM's read address port stuck at constant. 
+	4: RAM's read address port stuck at constant. 
+	5: RAM's read address port stuck at constant. 
+	6: RAM's read address port stuck at constant. 
+	7: RAM's read address port stuck at constant. 
+	8: RAM's read address port stuck at constant. 
+	9: Write port has constant address. 
+	10: Write port has constant address. 
+	11: Write port has constant address. 
+	12: Write port has constant address. 
+	13: Write port has constant address. 
+	14: Write port has constant address. 
+	15: Write port has constant address. 
+	16: Write port has constant address. 
+	17: Unable to determine number of words or word size in RAM. 
+	18: No valid read/write found for RAM. 
+WARNING: [Synth 8-4767] Trying to implement RAM 'mem_read[7]0' in registers. Block RAM or DRAM implementation is not possible; see log for reasons. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+Reason is one or more of the following :
+	1: RAM's read address port stuck at constant. 
+	2: RAM's read address port stuck at constant. 
+	3: RAM's read address port stuck at constant. 
+	4: RAM's read address port stuck at constant. 
+	5: RAM's read address port stuck at constant. 
+	6: RAM's read address port stuck at constant. 
+	7: RAM's read address port stuck at constant. 
+	8: RAM's read address port stuck at constant. 
+	9: Write port has constant address. 
+	10: Write port has constant address. 
+	11: Write port has constant address. 
+	12: Write port has constant address. 
+	13: Write port has constant address. 
+	14: Write port has constant address. 
+	15: Write port has constant address. 
+	16: Write port has constant address. 
+	17: Unable to determine number of words or word size in RAM. 
+	18: No valid read/write found for RAM. 
+WARNING: [Synth 8-4767] Trying to implement RAM 'mem_write[7]0' in registers. Block RAM or DRAM implementation is not possible; see log for reasons. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+Reason is one or more of the following :
+	1: RAM's read address port stuck at constant. 
+	2: RAM's read address port stuck at constant. 
+	3: RAM's read address port stuck at constant. 
+	4: RAM's read address port stuck at constant. 
+	5: RAM's read address port stuck at constant. 
+	6: RAM's read address port stuck at constant. 
+	7: RAM's read address port stuck at constant. 
+	8: RAM's read address port stuck at constant. 
+	9: Write port has constant address. 
+	10: Write port has constant address. 
+	11: Write port has constant address. 
+	12: Write port has constant address. 
+	13: Write port has constant address. 
+	14: Write port has constant address. 
+	15: Write port has constant address. 
+	16: Write port has constant address. 
+	17: Unable to determine number of words or word size in RAM. 
+	18: No valid read/write found for RAM. 
+WARNING: [Synth 8-4767] Trying to implement RAM 'mem_wdata[7]0' in registers. Block RAM or DRAM implementation is not possible; see log for reasons. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+Reason is one or more of the following :
+	1: RAM's read address port stuck at constant. 
+	2: RAM's read address port stuck at constant. 
+	3: RAM's read address port stuck at constant. 
+	4: RAM's read address port stuck at constant. 
+	5: RAM's read address port stuck at constant. 
+	6: RAM's read address port stuck at constant. 
+	7: RAM's read address port stuck at constant. 
+	8: RAM's read address port stuck at constant. 
+	9: Write port has constant address. 
+	10: Write port has constant address. 
+	11: Write port has constant address. 
+	12: Write port has constant address. 
+	13: Write port has constant address. 
+	14: Write port has constant address. 
+	15: Write port has constant address. 
+	16: Write port has constant address. 
+	17: Unable to determine number of words or word size in RAM. 
+	18: No valid read/write found for RAM. 
+WARNING: [Synth 8-4767] Trying to implement RAM 'byte_en[7]0' in registers. Block RAM or DRAM implementation is not possible; see log for reasons. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+Reason is one or more of the following :
+	1: RAM's read address port stuck at constant. 
+	2: RAM's read address port stuck at constant. 
+	3: RAM's read address port stuck at constant. 
+	4: RAM's read address port stuck at constant. 
+	5: RAM's read address port stuck at constant. 
+	6: RAM's read address port stuck at constant. 
+	7: RAM's read address port stuck at constant. 
+	8: RAM's read address port stuck at constant. 
+	9: Write port has constant address. 
+	10: Write port has constant address. 
+	11: Write port has constant address. 
+	12: Write port has constant address. 
+	13: Write port has constant address. 
+	14: Write port has constant address. 
+	15: Write port has constant address. 
+	16: Write port has constant address. 
+	17: Unable to determine number of words or word size in RAM. 
+	18: No valid read/write found for RAM. 
+WARNING: [Synth 8-4767] Trying to implement RAM 'dt_idx[7]0' in registers. Block RAM or DRAM implementation is not possible; see log for reasons. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:89]
+Reason is one or more of the following :
+	1: RAM's read address port stuck at constant. 
+	2: RAM's read address port stuck at constant. 
+	3: RAM's read address port stuck at constant. 
+	4: RAM's read address port stuck at constant. 
+	5: RAM's read address port stuck at constant. 
+	6: RAM's read address port stuck at constant. 
+	7: RAM's read address port stuck at constant. 
+	8: RAM's read address port stuck at constant. 
+	9: Write port has constant address. 
+	10: Write port has constant address. 
+	11: Write port has constant address. 
+	12: Write port has constant address. 
+	13: Write port has constant address. 
+	14: Write port has constant address. 
+	15: Write port has constant address. 
+	16: Write port has constant address. 
+	17: Unable to determine number of words or word size in RAM. 
+	18: No valid read/write found for RAM. 
+WARNING: [Synth 8-4767] Trying to implement RAM 'dt_read[7]0' in registers. Block RAM or DRAM implementation is not possible; see log for reasons. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:89]
+Reason is one or more of the following :
+	1: RAM's read address port stuck at constant. 
+	2: RAM's read address port stuck at constant. 
+	3: RAM's read address port stuck at constant. 
+	4: RAM's read address port stuck at constant. 
+	5: RAM's read address port stuck at constant. 
+	6: RAM's read address port stuck at constant. 
+	7: RAM's read address port stuck at constant. 
+	8: RAM's read address port stuck at constant. 
+	9: Write port has constant address. 
+	10: Write port has constant address. 
+	11: Write port has constant address. 
+	12: Write port has constant address. 
+	13: Write port has constant address. 
+	14: Write port has constant address. 
+	15: Write port has constant address. 
+	16: Write port has constant address. 
+	17: Unable to determine number of words or word size in RAM. 
+	18: No valid read/write found for RAM. 
+WARNING: [Synth 8-4767] Trying to implement RAM 'dt_write[7]0' in registers. Block RAM or DRAM implementation is not possible; see log for reasons. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:89]
+Reason is one or more of the following :
+	1: RAM's read address port stuck at constant. 
+	2: RAM's read address port stuck at constant. 
+	3: RAM's read address port stuck at constant. 
+	4: RAM's read address port stuck at constant. 
+	5: RAM's read address port stuck at constant. 
+	6: RAM's read address port stuck at constant. 
+	7: RAM's read address port stuck at constant. 
+	8: RAM's read address port stuck at constant. 
+	9: Write port has constant address. 
+	10: Write port has constant address. 
+	11: Write port has constant address. 
+	12: Write port has constant address. 
+	13: Write port has constant address. 
+	14: Write port has constant address. 
+	15: Write port has constant address. 
+	16: Write port has constant address. 
+	17: Unable to determine number of words or word size in RAM. 
+	18: No valid read/write found for RAM. 
+WARNING: [Synth 8-4767] Trying to implement RAM 'dt_wdata[7]0' in registers. Block RAM or DRAM implementation is not possible; see log for reasons. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:89]
+Reason is one or more of the following :
+	1: RAM's read address port stuck at constant. 
+	2: RAM's read address port stuck at constant. 
+	3: RAM's read address port stuck at constant. 
+	4: RAM's read address port stuck at constant. 
+	5: RAM's read address port stuck at constant. 
+	6: RAM's read address port stuck at constant. 
+	7: RAM's read address port stuck at constant. 
+	8: RAM's read address port stuck at constant. 
+	9: Write port has constant address. 
+	10: Write port has constant address. 
+	11: Write port has constant address. 
+	12: Write port has constant address. 
+	13: Write port has constant address. 
+	14: Write port has constant address. 
+	15: Write port has constant address. 
+	16: Write port has constant address. 
+	17: Unable to determine number of words or word size in RAM. 
+	18: No valid read/write found for RAM. 
+WARNING: [Synth 8-4767] Trying to implement RAM 'mem_rdata[7]0' in registers. Block RAM or DRAM implementation is not possible; see log for reasons. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:77]
+Reason is one or more of the following :
+	1: RAM's read address port stuck at constant. 
+	2: RAM's read address port stuck at constant. 
+	3: RAM's read address port stuck at constant. 
+	4: RAM's read address port stuck at constant. 
+	5: RAM's read address port stuck at constant. 
+	6: RAM's read address port stuck at constant. 
+	7: RAM's read address port stuck at constant. 
+	8: RAM's read address port stuck at constant. 
+	9: Write port has constant address. 
+	10: Write port has constant address. 
+	11: Write port has constant address. 
+	12: Write port has constant address. 
+	13: Write port has constant address. 
+	14: Write port has constant address. 
+	15: Write port has constant address. 
+	16: Write port has constant address. 
+	17: Unable to determine number of words or word size in RAM. 
+	18: No valid read/write found for RAM. 
+WARNING: [Synth 8-4767] Trying to implement RAM 'mem_valid[7]0' in registers. Block RAM or DRAM implementation is not possible; see log for reasons. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:77]
+Reason is one or more of the following :
+	1: RAM's read address port stuck at constant. 
+	2: RAM's read address port stuck at constant. 
+	3: RAM's read address port stuck at constant. 
+	4: RAM's read address port stuck at constant. 
+	5: RAM's read address port stuck at constant. 
+	6: RAM's read address port stuck at constant. 
+	7: RAM's read address port stuck at constant. 
+	8: RAM's read address port stuck at constant. 
+	9: Write port has constant address. 
+	10: Write port has constant address. 
+	11: Write port has constant address. 
+	12: Write port has constant address. 
+	13: Write port has constant address. 
+	14: Write port has constant address. 
+	15: Write port has constant address. 
+	16: Write port has constant address. 
+	17: Unable to determine number of words or word size in RAM. 
+	18: No valid read/write found for RAM. 
+WARNING: [Synth 8-4767] Trying to implement RAM 'dt_rdata[7]0' in registers. Block RAM or DRAM implementation is not possible; see log for reasons. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:77]
+Reason is one or more of the following :
+	1: RAM's read address port stuck at constant. 
+	2: RAM's read address port stuck at constant. 
+	3: RAM's read address port stuck at constant. 
+	4: RAM's read address port stuck at constant. 
+	5: RAM's read address port stuck at constant. 
+	6: RAM's read address port stuck at constant. 
+	7: RAM's read address port stuck at constant. 
+	8: RAM's read address port stuck at constant. 
+	9: Write port has constant address. 
+	10: Write port has constant address. 
+	11: Write port has constant address. 
+	12: Write port has constant address. 
+	13: Write port has constant address. 
+	14: Write port has constant address. 
+	15: Write port has constant address. 
+	16: Write port has constant address. 
+	17: Unable to determine number of words or word size in RAM. 
+	18: No valid read/write found for RAM. 
+WARNING: [Synth 8-4767] Trying to implement RAM 'dt_valid[7]0' in registers. Block RAM or DRAM implementation is not possible; see log for reasons. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:77]
+Reason is one or more of the following :
+	1: RAM's read address port stuck at constant. 
+	2: RAM's read address port stuck at constant. 
+	3: RAM's read address port stuck at constant. 
+	4: RAM's read address port stuck at constant. 
+	5: RAM's read address port stuck at constant. 
+	6: RAM's read address port stuck at constant. 
+	7: RAM's read address port stuck at constant. 
+	8: RAM's read address port stuck at constant. 
+	9: Write port has constant address. 
+	10: Write port has constant address. 
+	11: Write port has constant address. 
+	12: Write port has constant address. 
+	13: Write port has constant address. 
+	14: Write port has constant address. 
+	15: Write port has constant address. 
+	16: Write port has constant address. 
+	17: Unable to determine number of words or word size in RAM. 
+	18: No valid read/write found for RAM. 
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_rdata0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+WARNING: [Synth 8-3848] Net mem_valid0 in module/entity gpu does not have driver. [/home/tiny-gpu-pro-max-main/SystemVerilog/gpu.sv:83]
+INFO: [Common 17-14] Message 'Synth 8-3848' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+WARNING: [Synth 8-7129] Port disp_rdata[31] in module display_controller is either unconnected or has no load
+WARNING: [Synth 8-7129] Port disp_rdata[30] in module display_controller is either unconnected or has no load
+WARNING: [Synth 8-7129] Port disp_rdata[29] in module display_controller is either unconnected or has no load
+WARNING: [Synth 8-7129] Port disp_rdata[28] in module display_controller is either unconnected or has no load
+WARNING: [Synth 8-7129] Port disp_rdata[27] in module display_controller is either unconnected or has no load
+WARNING: [Synth 8-7129] Port disp_rdata[26] in module display_controller is either unconnected or has no load
+WARNING: [Synth 8-7129] Port disp_rdata[25] in module display_controller is either unconnected or has no load
+WARNING: [Synth 8-7129] Port disp_rdata[24] in module display_controller is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[0][31] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[0][30] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[0][29] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[0][28] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[0][27] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[0][26] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[0][25] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[0][24] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[0][23] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[0][22] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[0][21] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[0][20] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[0][19] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[0][18] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[0][17] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[0][16] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[0][15] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[0][14] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[0][13] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[0][12] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[1][31] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[1][30] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[1][29] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[1][28] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[1][27] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[1][26] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[1][25] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[1][24] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[1][23] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[1][22] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[1][21] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[1][20] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[1][19] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[1][18] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[1][17] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[1][16] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[1][15] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[1][14] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[1][13] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[1][12] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[2][31] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[2][30] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[2][29] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[2][28] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[2][27] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[2][26] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[2][25] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[2][24] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[2][23] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[2][22] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[2][21] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[2][20] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[2][19] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[2][18] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[2][17] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[2][16] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[2][15] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[2][14] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[2][13] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[2][12] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[3][31] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[3][30] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[3][29] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[3][28] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[3][27] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[3][26] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[3][25] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[3][24] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[3][23] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[3][22] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[3][21] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[3][20] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[3][19] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[3][18] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[3][17] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[3][16] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[3][15] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[3][14] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[3][13] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[3][12] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[4][31] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[4][30] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[4][29] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[4][28] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[4][27] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[4][26] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[4][25] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[4][24] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[4][23] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[4][22] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[4][21] in module data_buffer is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dt_idx[4][20] in module data_buffer is either unconnected or has no load
+INFO: [Common 17-14] Message 'Synth 8-7129' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:03 ; elapsed = 00:00:04 . Memory (MB): peak = 2408.785 ; gain = 324.203 ; free physical = 10085 ; free virtual = 24264
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 2423.629 ; gain = 339.047 ; free physical = 10085 ; free virtual = 24264
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 2423.629 ; gain = 339.047 ; free physical = 10085 ; free virtual = 24264
+---------------------------------------------------------------------------------
+Netlist sorting complete. Time (s): cpu = 00:00:00.07 ; elapsed = 00:00:00.07 . Memory (MB): peak = 2429.566 ; gain = 0.000 ; free physical = 10083 ; free virtual = 24262
+INFO: [Netlist 29-17] Analyzing 4 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [/home/tiny-gpu-pro-max-main/build/vivado/tiny_gpu.gen/sources_1/ip/clk_wiz_0/clk_wiz_0/clk_wiz_0_in_context.xdc] for cell 'clk_wiz'
+Finished Parsing XDC File [/home/tiny-gpu-pro-max-main/build/vivado/tiny_gpu.gen/sources_1/ip/clk_wiz_0/clk_wiz_0/clk_wiz_0_in_context.xdc] for cell 'clk_wiz'
+Parsing XDC File [/home/tiny-gpu-pro-max-main/constraints/boolean_mini_gpu.xdc]
+Finished Parsing XDC File [/home/tiny-gpu-pro-max-main/constraints/boolean_mini_gpu.xdc]
+INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [/home/tiny-gpu-pro-max-main/constraints/boolean_mini_gpu.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/top_propImpl.xdc].
+Resolution: To avoid this warning, move constraints listed in [.Xil/top_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+Parsing XDC File [/home/tiny-gpu-pro-max-main/build/vivado/tiny_gpu.runs/synth_1/dont_touch.xdc]
+Finished Parsing XDC File [/home/tiny-gpu-pro-max-main/build/vivado/tiny_gpu.runs/synth_1/dont_touch.xdc]
+Completed Processing XDC Constraints
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2530.367 ; gain = 0.000 ; free physical = 10069 ; free virtual = 24249
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 4 instances were transformed.
+  OBUFDS => OBUFDS_DUAL_BUF (INV, OBUFDS(x2)): 4 instances
+
+Constraint Validation Runtime : Time (s): cpu = 00:00:00.02 ; elapsed = 00:00:00.02 . Memory (MB): peak = 2530.402 ; gain = 0.000 ; free physical = 10069 ; free virtual = 24249
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:08 ; elapsed = 00:00:08 . Memory (MB): peak = 2530.402 ; gain = 445.820 ; free physical = 10062 ; free virtual = 24242
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7s50csga324-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:08 ; elapsed = 00:00:08 . Memory (MB): peak = 2538.371 ; gain = 453.789 ; free physical = 10062 ; free virtual = 24242
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:08 ; elapsed = 00:00:08 . Memory (MB): peak = 2538.371 ; gain = 453.789 ; free physical = 10062 ; free virtual = 24242
+---------------------------------------------------------------------------------
+INFO: [Synth 8-802] inferred FSM for state register 'state_reg' in module 'scheduler'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                 S_FETCH |                           000001 |                             0000
+            S_FETCH_WAIT |                           000010 |                             0001
+               S_EXECUTE |                           000100 |                             0010
+              S_MEM_ADDR |                           001000 |                             0011
+              S_MEM_WAIT |                           010000 |                             0100
+             S_WRITEBACK |                           100000 |                             0101
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_reg' using encoding 'one-hot' in module 'scheduler'
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 2538.371 ; gain = 453.789 ; free physical = 10070 ; free virtual = 24251
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   3 Input   32 Bit       Adders := 8     
+	   2 Input   32 Bit       Adders := 37    
+	   2 Input   12 Bit       Adders := 1     
+	   4 Input   12 Bit       Adders := 1     
+	   2 Input   11 Bit       Adders := 1     
+	   4 Input   11 Bit       Adders := 1     
+	   2 Input   10 Bit       Adders := 1     
+	   5 Input    5 Bit       Adders := 6     
+	   4 Input    5 Bit       Adders := 3     
+	   8 Input    4 Bit       Adders := 6     
+	   2 Input    4 Bit       Adders := 3     
++---XORs : 
+	   2 Input     32 Bit         XORs := 8     
+	   2 Input      1 Bit         XORs := 42    
++---Registers : 
+	               32 Bit    Registers := 323   
+	               24 Bit    Registers := 1     
+	               11 Bit    Registers := 1     
+	               10 Bit    Registers := 4     
+	                8 Bit    Registers := 2     
+	                5 Bit    Registers := 3     
+	                3 Bit    Registers := 9     
+	                1 Bit    Registers := 47    
++---Multipliers : 
+	              32x32  Multipliers := 8     
++---RAMs : 
+	             128K Bit	(4096 X 32 bit)          RAMs := 1     
+	              16K Bit	(512 X 32 bit)          RAMs := 8     
++---Muxes : 
+	   2 Input   32 Bit        Muxes := 203   
+	   4 Input   32 Bit        Muxes := 8     
+	   5 Input   32 Bit        Muxes := 2     
+	   8 Input   32 Bit        Muxes := 8     
+	   4 Input   24 Bit        Muxes := 1     
+	   2 Input   18 Bit        Muxes := 1     
+	   2 Input   17 Bit        Muxes := 1     
+	   2 Input   11 Bit        Muxes := 1     
+	   2 Input   10 Bit        Muxes := 12    
+	   4 Input   10 Bit        Muxes := 3     
+	   8 Input    9 Bit        Muxes := 8     
+	   2 Input    8 Bit        Muxes := 12    
+	   6 Input    6 Bit        Muxes := 1     
+	   4 Input    6 Bit        Muxes := 1     
+	   2 Input    6 Bit        Muxes := 2     
+	   2 Input    5 Bit        Muxes := 15    
+	   2 Input    4 Bit        Muxes := 16    
+	   4 Input    4 Bit        Muxes := 8     
+	   6 Input    4 Bit        Muxes := 1     
+	   2 Input    2 Bit        Muxes := 2     
+	   2 Input    1 Bit        Muxes := 583   
+	   3 Input    1 Bit        Muxes := 1     
+	   8 Input    1 Bit        Muxes := 1     
+	   5 Input    1 Bit        Muxes := 1     
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 120 (col length:60)
+BRAMs: 150 (col length: RAMB18 60 RAMB36 30)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+DSP Report: Generating DSP alu_result_comb0, operation Mode is: A*B.
+DSP Report: operator alu_result_comb0 is absorbed into DSP alu_result_comb0.
+DSP Report: operator alu_result_comb0 is absorbed into DSP alu_result_comb0.
+DSP Report: Generating DSP alu_result_comb0, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator alu_result_comb0 is absorbed into DSP alu_result_comb0.
+DSP Report: operator alu_result_comb0 is absorbed into DSP alu_result_comb0.
+DSP Report: Generating DSP alu_result_comb0, operation Mode is: A*B.
+DSP Report: operator alu_result_comb0 is absorbed into DSP alu_result_comb0.
+DSP Report: operator alu_result_comb0 is absorbed into DSP alu_result_comb0.
+DSP Report: Generating DSP alu_result_comb0, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator alu_result_comb0 is absorbed into DSP alu_result_comb0.
+DSP Report: operator alu_result_comb0 is absorbed into DSP alu_result_comb0.
+INFO: [Synth 8-6851] RAM (u_shared_mem/mem_reg) has partial Byte Wide Write Enable pattern, however no output register found in fanout of RAM. Recommended to use supported Byte Wide Write Enable template. 
+INFO: [Synth 8-6851] RAM (u_shared_mem/mem_reg) has partial Byte Wide Write Enable pattern, however no output register found in fanout of RAM. Recommended to use supported Byte Wide Write Enable template. 
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:01:05 ; elapsed = 00:01:05 . Memory (MB): peak = 3010.090 ; gain = 925.508 ; free physical = 9652 ; free virtual = 23844
+---------------------------------------------------------------------------------
+ Sort Area is cpu alu_result_comb0_0 : 0 0 : 3101 5879 : Used 8 time 0
+ Sort Area is cpu alu_result_comb0_0 : 0 1 : 2778 5879 : Used 8 time 0
+ Sort Area is cpu alu_result_comb0_3 : 0 0 : 2759 5418 : Used 8 time 0
+ Sort Area is cpu alu_result_comb0_3 : 0 1 : 2659 5418 : Used 8 time 0
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+
+Block RAM: Preliminary Mapping Report (see note below)
++-----------------------+-----------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|Module Name            | RTL Object      | PORT A (Depth x Width) | W | R | PORT B (Depth x Width) | W | R | Ports driving FF | RAMB18 | RAMB36 | 
++-----------------------+-----------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|u_gpui_2/u_data_buffer | bank[0].mem_reg | 512 x 32(READ_FIRST)   | W | R | 512 x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|u_gpui_2/u_data_buffer | bank[1].mem_reg | 512 x 32(READ_FIRST)   | W | R | 512 x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|u_gpui_2/u_data_buffer | bank[2].mem_reg | 512 x 32(READ_FIRST)   | W | R | 512 x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|u_gpui_2/u_data_buffer | bank[3].mem_reg | 512 x 32(READ_FIRST)   | W | R | 512 x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|u_gpui_2/u_data_buffer | bank[4].mem_reg | 512 x 32(READ_FIRST)   | W | R | 512 x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|u_gpui_2/u_data_buffer | bank[5].mem_reg | 512 x 32(READ_FIRST)   | W | R | 512 x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|u_gpui_2/u_data_buffer | bank[6].mem_reg | 512 x 32(READ_FIRST)   | W | R | 512 x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|u_gpui_2/u_data_buffer | bank[7].mem_reg | 512 x 32(READ_FIRST)   | W | R | 512 x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
++-----------------------+-----------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+
+Note: The table above is a preliminary report that shows the Block RAMs at the current stage of the synthesis flow. Some Block RAMs may be reimplemented as non Block RAM primitives later in the synthesis flow. Multiple instantiated Block RAMs are reported only once. 
+
+Distributed RAM: Preliminary Mapping Report (see note below)
++------------+----------------------+-----------+----------------------+------------------+
+|Module Name | RTL Object           | Inference | Size (Depth x Width) | Primitives       | 
++------------+----------------------+-----------+----------------------+------------------+
+|top         | u_shared_mem/mem_reg | Implied   | 4 K x 32             | RAM256X1S x 512  | 
++------------+----------------------+-----------+----------------------+------------------+
+
+Note: The table above is a preliminary report that shows the Distributed RAMs at the current stage of the synthesis flow. Some Distributed RAMs may be reimplemented as non Distributed RAM primitives later in the synthesis flow. Multiple instantiated RAMs are reported only once.
+
+DSP: Preliminary Mapping Report (see note below. The ' indicates corresponding REG is set)
++------------+----------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|Module Name | DSP Mapping    | A Size | B Size | C Size | D Size | P Size | AREG | BREG | CREG | DREG | ADREG | MREG | PREG | 
++------------+----------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|cpu         | A*B            | 18     | 16     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cpu         | (PCIN>>17)+A*B | 16     | 16     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cpu         | A*B            | 18     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cpu         | (PCIN>>17)+A*B | 18     | 16     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
++------------+----------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+
+Note: The table above is a preliminary report that shows the DSPs inferred at the current stage of the synthesis flow. Some DSP may be reimplemented as non DSP primitives later in the synthesis flow. Multiple instantiated DSPs are reported only once.
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:01:08 ; elapsed = 00:01:08 . Memory (MB): peak = 3010.090 ; gain = 925.508 ; free physical = 9639 ; free virtual = 23831
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:01:15 ; elapsed = 00:01:16 . Memory (MB): peak = 3010.090 ; gain = 925.508 ; free physical = 9646 ; free virtual = 23839
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+
+Block RAM: Final Mapping Report
++-----------------------+-----------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|Module Name            | RTL Object      | PORT A (Depth x Width) | W | R | PORT B (Depth x Width) | W | R | Ports driving FF | RAMB18 | RAMB36 | 
++-----------------------+-----------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|u_gpui_2/u_data_buffer | bank[0].mem_reg | 512 x 32(READ_FIRST)   | W | R | 512 x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|u_gpui_2/u_data_buffer | bank[1].mem_reg | 512 x 32(READ_FIRST)   | W | R | 512 x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|u_gpui_2/u_data_buffer | bank[2].mem_reg | 512 x 32(READ_FIRST)   | W | R | 512 x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|u_gpui_2/u_data_buffer | bank[3].mem_reg | 512 x 32(READ_FIRST)   | W | R | 512 x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|u_gpui_2/u_data_buffer | bank[4].mem_reg | 512 x 32(READ_FIRST)   | W | R | 512 x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|u_gpui_2/u_data_buffer | bank[5].mem_reg | 512 x 32(READ_FIRST)   | W | R | 512 x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|u_gpui_2/u_data_buffer | bank[6].mem_reg | 512 x 32(READ_FIRST)   | W | R | 512 x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|u_gpui_2/u_data_buffer | bank[7].mem_reg | 512 x 32(READ_FIRST)   | W | R | 512 x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
++-----------------------+-----------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+
+
+Distributed RAM: Final Mapping Report
++------------+----------------------+-----------+----------------------+------------------+
+|Module Name | RTL Object           | Inference | Size (Depth x Width) | Primitives       | 
++------------+----------------------+-----------+----------------------+------------------+
+|top         | u_shared_mem/mem_reg | Implied   | 4 K x 32             | RAM256X1S x 512  | 
++------------+----------------------+-----------+----------------------+------------------+
+
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+INFO: [Synth 8-7052] The timing for the instance u_gpu/u_data_buffer/bank[0].mem_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_gpu/u_data_buffer/bank[0].mem_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_gpu/u_data_buffer/bank[1].mem_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_gpu/u_data_buffer/bank[1].mem_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_gpu/u_data_buffer/bank[2].mem_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_gpu/u_data_buffer/bank[2].mem_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_gpu/u_data_buffer/bank[3].mem_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_gpu/u_data_buffer/bank[3].mem_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_gpu/u_data_buffer/bank[4].mem_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_gpu/u_data_buffer/bank[4].mem_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_gpu/u_data_buffer/bank[5].mem_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_gpu/u_data_buffer/bank[5].mem_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_gpu/u_data_buffer/bank[6].mem_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_gpu/u_data_buffer/bank[6].mem_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_gpu/u_data_buffer/bank[7].mem_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_gpu/u_data_buffer/bank[7].mem_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:01:21 ; elapsed = 00:01:22 . Memory (MB): peak = 3010.090 ; gain = 925.508 ; free physical = 9656 ; free virtual = 23848
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:01:24 ; elapsed = 00:01:24 . Memory (MB): peak = 3010.090 ; gain = 925.508 ; free physical = 9661 ; free virtual = 23854
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:01:24 ; elapsed = 00:01:24 . Memory (MB): peak = 3010.090 ; gain = 925.508 ; free physical = 9661 ; free virtual = 23853
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:01:26 ; elapsed = 00:01:26 . Memory (MB): peak = 3010.090 ; gain = 925.508 ; free physical = 9655 ; free virtual = 23848
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:01:26 ; elapsed = 00:01:26 . Memory (MB): peak = 3010.090 ; gain = 925.508 ; free physical = 9655 ; free virtual = 23847
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:01:26 ; elapsed = 00:01:26 . Memory (MB): peak = 3010.090 ; gain = 925.508 ; free physical = 9654 ; free virtual = 23847
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:01:26 ; elapsed = 00:01:26 . Memory (MB): peak = 3010.090 ; gain = 925.508 ; free physical = 9654 ; free virtual = 23847
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+DSP Final Report (the ' indicates corresponding REG is set)
++------------+--------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|Module Name | DSP Mapping  | A Size | B Size | C Size | D Size | P Size | AREG | BREG | CREG | DREG | ADREG | MREG | PREG | 
++------------+--------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|cpu         | A*B          | 17     | 15     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cpu         | A*B          | 17     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cpu         | PCIN>>17+A*B | 17     | 15     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cpu         | A*B          | 17     | 15     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cpu         | A*B          | 17     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cpu         | PCIN>>17+A*B | 0      | 15     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cpu         | A*B          | 17     | 15     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cpu         | A*B          | 17     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cpu         | PCIN>>17+A*B | 0      | 15     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cpu         | A*B          | 17     | 15     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cpu         | A*B          | 17     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cpu         | PCIN>>17+A*B | 0      | 15     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cpu         | A*B          | 17     | 15     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cpu         | A*B          | 17     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cpu         | PCIN>>17+A*B | 0      | 15     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cpu         | A*B          | 17     | 15     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cpu         | A*B          | 17     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cpu         | PCIN>>17+A*B | 0      | 15     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cpu         | A*B          | 17     | 15     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cpu         | A*B          | 17     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cpu         | PCIN>>17+A*B | 0      | 15     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cpu         | A*B          | 17     | 15     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cpu         | A*B          | 17     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cpu         | PCIN>>17+A*B | 0      | 15     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
++------------+--------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+
+
+Report BlackBoxes: 
++------+--------------+----------+
+|      |BlackBox name |Instances |
++------+--------------+----------+
+|1     |clk_wiz_0     |         1|
++------+--------------+----------+
+
+Report Cell Usage: 
++------+----------+------+
+|      |Cell      |Count |
++------+----------+------+
+|1     |clk_wiz   |     1|
+|2     |CARRY4    |   467|
+|3     |DSP48E1   |    24|
+|4     |LUT1      |   838|
+|5     |LUT2      |  1262|
+|6     |LUT3      |  1295|
+|7     |LUT4      |  1754|
+|8     |LUT5      |  2925|
+|9     |LUT6      |  8860|
+|10    |MUXF7     |  1459|
+|11    |MUXF8     |    48|
+|12    |OSERDESE2 |     8|
+|14    |RAM256X1S |   512|
+|15    |RAMB36E1  |     8|
+|23    |FDCE      |    27|
+|24    |FDPE      |    15|
+|25    |FDRE      |  9811|
+|26    |FDSE      |     1|
+|27    |IBUF      |     1|
+|28    |OBUF      |     4|
+|29    |OBUFDS    |     4|
++------+----------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:01:26 ; elapsed = 00:01:26 . Memory (MB): peak = 3010.090 ; gain = 925.508 ; free physical = 9654 ; free virtual = 23847
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 3 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:01:24 ; elapsed = 00:01:25 . Memory (MB): peak = 3010.090 ; gain = 818.734 ; free physical = 9654 ; free virtual = 23847
+Synthesis Optimization Complete : Time (s): cpu = 00:01:26 ; elapsed = 00:01:27 . Memory (MB): peak = 3010.098 ; gain = 925.508 ; free physical = 9654 ; free virtual = 23847
+INFO: [Project 1-571] Translating synthesized netlist
+Netlist sorting complete. Time (s): cpu = 00:00:00.12 ; elapsed = 00:00:00.12 . Memory (MB): peak = 3010.098 ; gain = 0.000 ; free physical = 9816 ; free virtual = 24009
+INFO: [Netlist 29-17] Analyzing 2522 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.01 . Memory (MB): peak = 3066.117 ; gain = 0.000 ; free physical = 9814 ; free virtual = 24007
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 516 instances were transformed.
+  OBUFDS => OBUFDS_DUAL_BUF (INV, OBUFDS(x2)): 4 instances
+  RAM256X1S => RAM256X1S (MUXF7(x2), MUXF8, RAMS64E(x4)): 512 instances
+
+Synth Design complete | Checksum: 498f07f5
+INFO: [Common 17-83] Releasing license: Synthesis
+112 Infos, 233 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:01:32 ; elapsed = 00:01:32 . Memory (MB): peak = 3066.152 ; gain = 1389.539 ; free physical = 9817 ; free virtual = 24008
+INFO: [Common 17-2834] synth_design peak Physical Memory [PSS] (MB): overall = 2322.016; main = 2090.876; forked = 261.614
+INFO: [Common 17-2834] synth_design peak Virtual Memory [VSS] (MB): overall = 3996.715; main = 3066.121; forked = 986.621
+Write ShapeDB Complete: Time (s): cpu = 00:00:00.06 ; elapsed = 00:00:00.02 . Memory (MB): peak = 3090.129 ; gain = 0.000 ; free physical = 9819 ; free virtual = 24013
+INFO: [Common 17-1381] The checkpoint '/home/tiny-gpu-pro-max-main/build/vivado/tiny_gpu.runs/synth_1/top.dcp' has been generated.
+INFO: [Vivado 12-24828] Executing command : report_utilization -file top_utilization_synth.rpt -pb top_utilization_synth.pb
+INFO: [Common 17-206] Exiting Vivado at Wed Jul 29 00:52:20 2026...

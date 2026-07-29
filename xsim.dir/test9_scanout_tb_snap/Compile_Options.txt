@@ -1,0 +1,1 @@
+-timescale "1ns/1ps" "test9_scanout_tb" -s "test9_scanout_tb_snap" -log ".sim/test9_scanout_tb.elab.log" 

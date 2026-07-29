@@ -1,0 +1,1 @@
+-timescale "1ns/1ps" "test7_kernel_tb" -s "test7_kernel_tb_snap" -log ".sim/test7_kernel_tb.elab.log" 

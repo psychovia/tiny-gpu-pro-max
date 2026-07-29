@@ -1,0 +1,1 @@
+-debug "typical" -timescale "1ns/1ps" "test0" -s "test0_run" -log "/tmp/claude-1000/-home/a44bba1c-823c-4818-b236-add25c6f5ea2/scratchpad/xelab.log" 

@@ -1,0 +1,7 @@
+Running: xsim.dir/test6_lanes_tb_snap/xsimk -runall -simmode gui -wdb test6_lanes_tb_snap.wdb -simrunnum 0 -socket 55323
+Design successfully loaded
+Design Loading Memory Usage: 196324 KB (Peak: 196332 KB)
+Design Loading CPU Usage: 580 ms
+Simulation completed
+Simulation Memory Usage: 270316 KB (Peak: 335592 KB)
+Simulation CPU Usage: 580 ms
